@@ -4,7 +4,7 @@
 
 > alpha, opaque, opacity 의 차이가 무엇인가요?
 >
-> [질문 바로가기]([https://yagom.net/forums/topic/alpha-opaque-opacity%ec%9d%98-%ec%b0%a8%ec%9d%b4%eb%a5%bc-%eb%aa%85%ed%99%95%ed%9e%88-%eb%aa%a8%eb%a5%b4%ea%b2%a0%ec%96%b4%ec%9a%94-%e3%85%a0%e3%85%a0/](https://yagom.net/forums/topic/alpha-opaque-opacity의-차이를-명확히-모르겠어요-ㅠㅠ/))
+> [질문 바로가기](https://yagom.net/forums/topic/alpha-opaque-opacity의-차이를-명확히-모르겠어요-ㅠㅠ/)
 
 ### A.
 
