@@ -61,3 +61,53 @@
 
 * [How to check app is installed or not in phone](https://stackoverflow.com/questions/41545283/how-to-check-app-is-installed-or-not-in-phone)
 
+----
+
+### Q. 화면 캡쳐를 막는 방법이 있나요?
+
+> 캡쳐를 감지하는 Notification 은 찾았는데 막는 방법을 못 찾겠어요.
+>
+> ++ 사용자가 캡쳐를 할 때 보내지는 [userDidTakeScreenshotNotification](https://developer.apple.com/documentation/uikit/uiapplication/1622966-userdidtakescreenshotnotificatio)
+>
+> [질문 바로가기](https://yagom.net/forums/topic/화면-캡쳐를-막는-방법을-알아보고-있는데요-어떻게/)
+
+### A.
+
+> * 어떤 원리를 통해 가능한지는 잘 모르겠지만 [ScreenShieldKit](https://screenshieldkit.com/) 이라는 상용 라이브러리도 있다고 들었습니다. 기본적으로 완전히 막지는 못하고 막아야 할 콘텐츠만 안 보이게 되는 것 같아요. 또, 저 라이브러리로 화면이 영상 녹화되는지도 파악하고 콘텐츠를 안 보이게 할 수 있는 것 같습니다.
+> * 영상 녹화 중 안 보이게 하려면 이런 방법을 통해서도 가능할 듯합니다. [Detecting screen capturing in iOS 11](https://medium.com/@abhimuralidharan/detecting-screen-capturing-in-ios-11-cca15881c785)
+>
+> * ++ 다른 사이트들에서 [Photos 프레임워크](https://developer.apple.com/documentation/photokit)와 userDidTakeScreenshotNotification 을 활용해 유저가 화면을 캡쳐했을 때 사진 앱에 접근해 캡쳐된 사진을 지우는 방법이 있다는 답변이 많아 직접 구현해 보았습니다.
+>
+>   ```swift
+>   NotificationCenter.default.addObserver(forName: UIApplication.userDidTakeScreenshotNotification, object: nil, queue: .main) { _ in
+>               let fetchOptions = PHFetchOptions()
+>               // 생성 날짜 순으로 정렬
+>               fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+>               
+>               // 지정한 옵션으로 정렬 된 모든 이미지를 가져옴
+>               let fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+>               print(fetchResult.count)
+>                                                                                                                                
+>               // 정렬된 이미지 중 가장 최근 이미지를 가져옴
+>               guard let capturedImage = fetchResult.firstObject else { return }
+>               
+>               // 삭제 동작 수행
+>               PHPhotoLibrary.shared().performChanges({
+>                   PHAssetChangeRequest.deleteAssets([capturedImage] as NSFastEnumeration)
+>               }) { isSuccess, error in
+>                   // 성공, 실패 후 동작 처리
+>               }
+>           }
+>   ```
+>
+>   그러나 생각했던 것과 달리 notification 을 받은 시점이 아직 사진 앱에 스크린샷이 추가되기 전이고, 사진 앱에 추가 된 후라고 하더라도
+>
+>   ![image](https://user-images.githubusercontent.com/50410213/86616352-acc6fe00-bff0-11ea-8f6e-ebdbeb84bff7.png)
+>
+>   위 사진처럼 매번 사용자에게 권한을 요청하여 캡쳐를 막는다고 보긴 어려웠습니다.
+
+### 참고할 만한 비슷한 질문들
+
+* [Prevent user from taking screenshot of my app like Netflix](https://developer.apple.com/forums/thread/123725)
+
+* [Prevent screen capture in an iOS app](https://stackoverflow.com/questions/18680028/prevent-screen-capture-in-an-ios-app)
