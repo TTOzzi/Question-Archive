@@ -84,7 +84,7 @@
 >               // 생성 날짜 순으로 정렬
 >               fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
 >               
->               // 지정한 옵션으로 정렬 된 모든 이미지를 가져옴
+>               // 지정한 옵션으로 정렬된 모든 이미지를 가져옴
 >               let fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
 >               print(fetchResult.count)
 >                                                                                                                                
@@ -100,7 +100,7 @@
 >           }
 >   ```
 >
->   그러나 생각했던 것과 달리 notification 을 받은 시점이 아직 사진 앱에 스크린샷이 추가되기 전이고, 사진 앱에 추가 된 후라고 하더라도
+>   그러나 생각했던 것과 달리 notification 을 받은 시점이 아직 사진 앱에 스크린샷이 추가되기 전이고, 사진 앱에 추가된 후라고 하더라도
 >
 >   ![image](https://user-images.githubusercontent.com/50410213/86616352-acc6fe00-bff0-11ea-8f6e-ebdbeb84bff7.png)
 >
