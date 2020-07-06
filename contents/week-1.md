@@ -102,7 +102,7 @@
 >
 >   그러나 생각했던 것과 달리 notification 을 받은 시점이 아직 사진 앱에 스크린샷이 추가되기 전이고, 사진 앱에 추가된 후라고 하더라도
 >
->   ![image](https://user-images.githubusercontent.com/50410213/86616352-acc6fe00-bff0-11ea-8f6e-ebdbeb84bff7.png)
+>   <img src="https://user-images.githubusercontent.com/50410213/86616352-acc6fe00-bff0-11ea-8f6e-ebdbeb84bff7.png" width="40%">
 >
 >   위 사진처럼 매번 사용자에게 권한을 요청하여 캡쳐를 막는다고 보긴 어려웠습니다.
 
