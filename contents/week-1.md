@@ -22,3 +22,40 @@
   * [UIView: opaque vs. alpha vs. opacity](https://stackoverflow.com/questions/8520434/uiview-opaque-vs-alpha-vs-opacity)
   * [Is the opacity and alpha the same thing for UIView](https://stackoverflow.com/questions/15381436/is-the-opacity-and-alpha-the-same-thing-for-uiview/15381634)
 
+
+
+### Q. 특정 앱의 설치 여부를 확인하는 방법이 있나요?
+
+> 페이스북이나 인스타그램 같은 sns 앱들이 기기에 설치되어 있는지 확인할 수 있는 방법이 있을까요?
+>
+> [질문 바로가기](https://yagom.net/forums/topic/특정-앱이-설치되어-있는지-여부를-확인하는-방법이/)
+
+### A.
+
+> * [canOpenURL(_:)](https://developer.apple.com/documentation/uikit/uiapplication/1622952-canopenurl#discussion) 을 활용한 방법
+>
+>   ```swift
+>   func isInstagramInstalled() -> Bool {
+>       return UIApplication.shared.canOpenURL("instagram://app".url())
+>   }
+>   func isFacebookInstalled() -> Bool {
+>       return UIApplication.shared.canOpenURL("fb://".url())
+>   }
+>   ```
+>
+>   ++ 매개 변수로 URL 을 받아 해당 URL 을 처리할 수 있는 앱이 있는지를 반환해주는 메소드입니다. **iOS 9.0 이상에서 사용할 때는 앱의 Info.plist 파일에 [LSApplicationQueriesSchemes](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/plist/info/LSApplicationQueriesSchemes) 를 추가해주어야 합니다. URLScheme 을 추가하지 않으면 앱의 설치 여부와 관계없이 항상 false 를 반환합니다.**
+>
+> * SDK 를 활용한 방법 ([Kakao iOS SDK](https://developers.kakao.com/sdk/reference/ios-legacy/release/Classes/KLKTalkLinkCenter.html#//api/name/isAvailableWithError:))
+>
+>   ```swift
+>   func isKakaoInstalled() -> Bool {
+>       return KLKTalkLinkCenter.shared().isAvailableWithError()
+>   }
+>   ```
+>
+>   ++ 카카오톡뿐만 아니라 [페이스북](https://developers.facebook.com/docs/ios/), [트위터](https://developer.twitter.com/en/docs/developer-utilities/twitter-libraries) 등 다른 sns 앱들도 SDK 나 library 를 지원하고 있으니 찾아보면 다른 방법들도 있을 것 같습니다.
+
+### 참고할 만한 비슷한 질문들
+
+* [How to check app is installed or not in phone](https://stackoverflow.com/questions/41545283/how-to-check-app-is-installed-or-not-in-phone)
+
