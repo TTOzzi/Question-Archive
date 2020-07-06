@@ -18,7 +18,7 @@
 >
 > - [opacity](https://developer.apple.com/documentation/quartzcore/calayer/1410933-opacity): 불투명도. 0.0(투명)~1.0(불투명) 범위내에 있어야 하며, 해당 범위를 벗어나는 값은 최소값 또는 최대값으로 고정됩니다. 이 속성의 기본값은 1.0이며, alpha와 차이는 alpha는 UIView에, opacity는 CALayer의 프로퍼티라는 것입니다.
 
-* **참고할 만한 비슷한 질문들**
+### 참고할 만한 비슷한 질문들
   * [UIView: opaque vs. alpha vs. opacity](https://stackoverflow.com/questions/8520434/uiview-opaque-vs-alpha-vs-opacity)
   * [Is the opacity and alpha the same thing for UIView](https://stackoverflow.com/questions/15381436/is-the-opacity-and-alpha-the-same-thing-for-uiview/15381634)
 
