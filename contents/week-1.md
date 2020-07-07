@@ -86,7 +86,6 @@
 >               
 >               // 지정한 옵션으로 정렬된 모든 이미지를 가져옴
 >               let fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
->               print(fetchResult.count)
 >                                                                                                                                
 >               // 정렬된 이미지 중 가장 최근 이미지를 가져옴
 >               guard let capturedImage = fetchResult.firstObject else { return }
