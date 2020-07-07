@@ -109,5 +109,6 @@
 ### 참고할 만한 비슷한 질문들
 
 * [Prevent user from taking screenshot of my app like Netflix](https://developer.apple.com/forums/thread/123725)
-
 * [Prevent screen capture in an iOS app](https://stackoverflow.com/questions/18680028/prevent-screen-capture-in-an-ios-app)
+* [iOS 11 Screen Recording - Copyright Risks](https://developer.apple.com/forums/thread/86521)
+
