@@ -111,3 +111,28 @@
 * [Prevent screen capture in an iOS app](https://stackoverflow.com/questions/18680028/prevent-screen-capture-in-an-ios-app)
 * [iOS 11 Screen Recording - Copyright Risks](https://developer.apple.com/forums/thread/86521)
 
+----
+
+### Q. 이미지 애니메이션은 어떻게 구현하나요?
+
+>gif 로드, 애니메이션 프레임 수 만큼 이미지 파일 리스트를 반복으로 보여주기, 코드로 개별 이미지 애니메이션 구현 등 여러 방식을 적용해보고 있는데 여러 개의 이미지를 활용한 애니메이션을 구현할 때의 효율적인 방법이 있나요?
+
+### A.
+
+>* iOS 에서 gif 는 [UIImageView](https://developer.apple.com/documentation/uikit/uiimageview) 등의 클래스에서 직접적으로 지원하지 않습니다.
+>
+>  [WKWebView](https://developer.apple.com/documentation/webkit/wkwebview) 등을 통한 간접적인 방법을 사용해야 하므로 효율이 좋지 못하고 성능상의 이점도 없습니다.
+>
+>* 가장 간단한 방법으로는 UIImageView 클래스의 [animationImages](https://developer.apple.com/documentation/uikit/uiimageview/1621068-animationimages) 프로퍼티를 사용하여 애니메이션에 사용할 이미지를 넣는 방법입니다. [How To Make iOS Animations With UIImageView in Swift](https://marcosantadev.com/make-uiimageview-animations/) 를 참고해보세요. 만약 좀 더 상세하게 제어하고 싶거나 복잡한 애니메이션이 필요하다고 생각하면 라이브러리를 활용하는 것도 좋은 방법입니다.
+>
+>* 효율을 위해서는 내장되어있는 기능을 사용하는 것이 가장 좋으나 디자이너가 복잡한 애니메이션을 요구하는 경우도 많습니다. 그럴 때 사용할 만한 [lottie](https://lottiefiles.com/) 라는 라이브러리도 있습니다. JSON 형식의 애니메이션을 사용하는데 꽤 직관적이어서 좋습니다. [lottie-ios github 저장소](https://github.com/airbnb/lottie-ios)
+>
+>* ++ [UIImage](https://developer.apple.com/documentation/uikit/uiimage) 클래스의 [animatedImage(with:duration:)](https://developer.apple.com/documentation/uikit/uiimage/1624149-animatedimage) 메소드를 활용하는 방법도 있습니다.
+>
+>* ++ 이미지 애니메이션에 한정된 것은 아니지만 좀 더 복잡하고 부드러운 애니메이션을 원한다면 [animateKeyframes(withDuration:delay:options:animations:completion:)](https://developer.apple.com/documentation/uikit/uiview/1622552-animatekeyframes) 나 [Core Animation](https://developer.apple.com/documentation/quartzcore) 을 활용한 여러 가지 방법들이 있습니다.
+
+### 참고할 만한 비슷한 질문들
+
+* [How to animate the change of image in an UIImageView](https://stackoverflow.com/questions/2834573/how-to-animate-the-change-of-image-in-an-uiimageview)
+* [Swift - How to animate Images?](https://stackoverflow.com/questions/24364504/swift-how-to-animate-images)
+* [Animation using array of images in sequence](https://stackoverflow.com/questions/6040528/animation-using-array-of-images-in-sequence)
