@@ -176,9 +176,7 @@
 
 ### A.
 
->* 우선 위 내용을 이해하려면 스위프트의 ARC 라는 개념과 클로저의 Capture 라는 개념을 이해해야 합니다. 예제 코드의 클로저는 클로저가 생성되는 시점의 인스턴스 상태를 유지하기 위해 클로저 내부의 인스턴스를 모두 획득(capture)해둡니다. 그러기 위해서 **self** 즉, 클로저는 프로퍼티로 갖게 되는 **Thing** 클래스의 인스턴스가 클로저에 의해 획득되어 reference count 가 1 증가합니다. 또, 해당 클로저가 **disposable** 이라는 인스턴스 프로퍼티에 할당되므로 클로저의 reference count 도 1 증가합니다. 서로 reference count 를 올려주기 때문에 순환참조 문제가 발생합니다.
->
->  이에 대해 더 알아보고 싶다면 스위프트 언어 가이드 문서 중 [ARC 문서](https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html) 를 참고하면 훨씬 도움이 됩니다. 영어가 너무 어렵다면 ARC 및 클로저 값 획득 등의 내용으로 검색해보면 많은 내용을 찾아볼 수 있습니다. [[Swift] Automatic Reference Counting 정리](http://minsone.github.io/mac/ios/swift-automatic-reference-counting-summary)
+>* 우선 위 내용을 이해하려면 스위프트의 ARC 라는 개념과 클로저의 Capture 라는 개념을 이해해야 합니다. <br/>예제 코드의 클로저는 클로저가 생성되는 시점의 인스턴스 상태를 유지하기 위해 클로저 내부의 인스턴스를 모두 획득(capture)해둡니다. 그러기 위해서 **self** 즉, 클로저는 프로퍼티로 갖게 되는 **Thing** 클래스의 인스턴스가 클로저에 의해 획득되어 reference count 가 1 증가합니다. 또, 해당 클로저가 **disposable** 이라는 인스턴스 프로퍼티에 할당되므로 클로저의 reference count 도 1 증가합니다. 서로 reference count 를 올려주기 때문에 순환참조 문제가 발생합니다. <br/>이에 대해 더 알아보고 싶다면 스위프트 언어 가이드 문서 중 [ARC 문서](https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html) 를 참고하면 훨씬 도움이 됩니다. 영어가 너무 어렵다면 ARC 및 클로저 값 획득 등의 내용으로 검색해보면 많은 내용을 찾아볼 수 있습니다. [[Swift] Automatic Reference Counting 정리](http://minsone.github.io/mac/ios/swift-automatic-reference-counting-summary)
 
 ### 참고할 만한 비슷한 질문들
 
