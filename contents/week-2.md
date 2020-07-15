@@ -25,3 +25,32 @@ LaunchScreen 에 이미지 슬라이드 애니메이션을 적용하고 싶은�
 * [Animated Splash Screen](https://developer.apple.com/forums/thread/110295)
 * [Splash screen in iOS games](https://stackoverflow.com/questions/29047522/splash-screen-in-ios-games)
 
+----
+
+### Q.
+
+> override 할 때 super 의 메소드를 꼭 호출해야 하나요?
+
+viewController 에서
+
+```swift
+override func viewDidLoad() {
+  super.viewDidLoad()
+}
+```
+
+super.viewDidLoad() 를 빼도 에러가 안 나던데 꼭 호출해야 하나요?
+
+[질문 바로가기](https://yagom.net/forums/topic/override-할-때-super-꼭-호출해야-하나요/)
+
+### A.
+
+* super 는 부모 클래스를 의미하는데요. 질문 내용은 오버라이딩 할 때 부모의 작업을 실행할지 말지 선택하는 것이라 할 수 있겠죠. 보통 [viewDidLoad()](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621495-viewdidload) 같이 뷰 라이프 사이클은 [템플릿 패턴](https://en.wikipedia.org/wiki/Template_method_pattern)으로 구현되어 있는데 뷰 컨트롤러의 뷰가 메모리에 로드될 때, OS 에 의해 호출되는 것이기 때문에 super 의 메소드를 호출하는 게 좋습니다.
+* super 의 메소드를 호출하는 것이 선택인 경우도 있고 필수인 경우도 있습니다. 꼭 필요한지 아닌지는 문서에 보면 대부분 나와 있습니다. [AppKit viewDidLoad() 공식문서](https://developer.apple.com/documentation/appkit/nsviewcontroller/1434476-viewdidload) 처럼 discussion 부분에 설명이 있을 겁니다.
+* override 할 때 super 를 호출하지 않아야 하는 경우도 있습니다. 대표적인 예시로 [loadView()](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621454-loadview) 가 있습니다. 
+* super 메소드를 호출하는 것을 자꾸 깜빡하신다면 코딩 스타일을 교정해주는 [SwiftLint](https://realm.github.io/SwiftLint/overridden_super_call.html) 라이브러리를 이용해보셔도 좋습니다.
+* 상속과 오버라이딩에 대해 더 알고 싶다면 [Swift: Inheritance](https://docs.swift.org/swift-book/LanguageGuide/Inheritance.html) 도 읽어보면 좋을것 같아요!
+
+### 참고할 만한 비슷한 질문들
+
+* [When to use super when overriding ios methods](https://stackoverflow.com/questions/38689059/when-to-use-super-when-overriding-ios-methods)
