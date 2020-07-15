@@ -54,3 +54,49 @@ super.viewDidLoad() 를 빼도 에러가 안 나던데 꼭 호출해야 하나�
 ### 참고할 만한 비슷한 질문들
 
 * [When to use super when overriding ios methods](https://stackoverflow.com/questions/38689059/when-to-use-super-when-overriding-ios-methods)
+----
+
+### Q.
+
+> Designated initializer 와 Convenience initializer 의 차이가 무엇인가요?
+
+Apple 문서에 보면 Convenience init 은 '같은 클래스에서 다른 이니셜라이저를 호출해야 한다' 라고 하는데 잘 이해가 안 됩니다. Convenience init 은 어떤 상황에 사용되고 Designated init 과의 차이는 무엇인가요?
+
+[질문 바로가기](https://yagom.net/forums/topic/swift-초기화-이니셜라이져/)
+
+### A.
+
+* Designated init 은 클래스의 모든 프로퍼티가 초기화될 수 있도록 해줘야 하고, Convenience init 은 쉽게 생각하면 보조 이니셜라이저라고 할 수 있는데, Designated init 의 파라미터 일부를 기본값으로 설정해서 Convenience init 안에서 Designated init 을 호출해서 쓸 수 있는 거예요.
+
+  ```swift
+  class Beverage {
+    var name: String
+    var capacity: Int
+    // 지정 이니셜라이저 - 모든 인스턴스의 저장 프로퍼티 값 초기화(할당)
+    init(name: String, capacity: Int) {
+      self.name = name
+      self.capacity = capacity
+    }
+    // 편의 이니셜라이저 - 지정 이니셜라이저를 통해 인스턴스 초기화
+    convenience init(name: String) {
+      self.init(name: name, capacity: 330)
+    }
+    // 편의 이니셜라이저 - 다른 편의 이니셜라이저를 통해 인스턴스 초기화
+    convenience init() {
+      self.init(name: "Fanta")
+    }
+  }
+  ```
+
+  Convenience init 에는 속성 중 인스턴스 생성 시점에 지정해줘야 할 것만 파라미터로 넣어놓고, 그 안에서 기본값이 들어간 다른 이니셜라이저를 호출한다고 생각하시면 됩니다! 예시코드처럼 Convenience init 에는 Designated init 뿐만 아니라 다른 Convenience init 을 호출해도 됩니다.
+
+  ![initializer chaining](https://docs.swift.org/swift-book/_images/initializerDelegation01_2x.png)
+
+  하지만 위 그림처럼 같은 클래스 내부에서 init 체인이 연결되는 끝 지점은 항상 Designated init 이여야 합니다.
+
+* 더 자세한 내용은 [Swift: Initialization](https://docs.swift.org/swift-book/LanguageGuide/Initialization.html) 을 읽어보세요!
+
+### 참고할 만한 비슷한 질문들
+
+* [What the difference between designated and convenience init in this code below](https://stackoverflow.com/questions/29563147/what-the-difference-between-designated-and-convenience-init-in-this-code-below)
+* [What is the difference between convenience init vs init in swift, explicit examples better](https://stackoverflow.com/questions/40093484/what-is-the-difference-between-convenience-init-vs-init-in-swift-explicit-examp)
