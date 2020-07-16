@@ -142,3 +142,19 @@ loadView() 와 viewDidLoad() 의 차이점은 무엇이고 각각 어떤 경우�
 * [How can I implement Sign-In-With-Apple in a webview?](https://stackoverflow.com/questions/60461480/how-can-i-implement-sign-in-with-apple-in-a-webview)
 * [Will "Sign in With Apple" allow apps to be backward compatible with iOS 12 and lower?](https://stackoverflow.com/questions/57928420/will-sign-in-with-apple-allow-apps-to-be-backward-compatible-with-ios-12-and-l)
 * [Sign In With Apple and Older Devices](https://developer.apple.com/forums/thread/649267)
+
+----
+
+### Q.
+
+> 기기에서 애플 로그인을 할 때 사용자 정보(이름, 이메일)가 안 받아져요.
+
+애플 로그인을 [ASAuthorizationAppleIDRequest](https://developer.apple.com/documentation/authenticationservices/asauthorizationappleidrequest?language=objc) 의 [requestedScopes](https://developer.apple.com/documentation/authenticationservices/asauthorizationopenidrequest/3153062-requestedscopes) 에 [fullName](https://developer.apple.com/documentation/authenticationservices/asauthorization/scope/3153028-fullname) 과 [email](https://developer.apple.com/documentation/authenticationservices/asauthorization/scope/3153027-email) 을 설정해서 이름과 이메일을 응답으로 받아오도록 구현하였습니다. 시뮬레이터에서 테스트할 때는 애플 로그인을 할 때마다 사용자 정보를 받아오지만, 실제 기기에서 테스트하면 첫 요청에서는 사용자 정보를 잘 받아오는데 그 후부턴 [user identifier](https://developer.apple.com/documentation/authenticationservices/asauthorizationappleidcredential/3153037-user) 만 받아오고 fullName 과 email 에는 nil 이 반환됩니다. 어떻게 해결해야 할까요?
+
+[질문 바로가기](https://developer.apple.com/forums/thread/121496)
+
+### A.
+
+* 사용자가 해당 앱에 처음 로그인할 때만 사용자 정보를 [ASAuthorizationAppleIDCredential](https://developer.apple.com/documentation/authenticationservices/asauthorizationappleidcredential) 에 담아 보냅니다. 이후 동일한 계정으로 앱에 로그인하면 사용자 정보가 공유되지 않고 사용자 식별자만 ASAuthorizationAppleIDCredential 으로 반환합니다. 서버에 계정이 성공적으로 생성 되었는지 확인할 수 있을 때까지 처음에 받은 사용자 정보를 캐시 해두는 것을 권장합니다. [Authenticationg Users with Sign in with Apple](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api/authenticating_users_with_sign_in_with_apple) 의 **Send Information to App Servers and Verify Tokens** 부분을 참고하세요.
+* 실제 기기에서 사용자 정보를 받아오는 동작을 여러 번 테스트해야 하는 상황이라면 앱의 Bundle Identifier 를 변경하거나, [Apple ID 계정 관리](https://appleid.apple.com/#!&page=signin) 의 **Apple ID를 사용하는 앱 및 웹 사이트** 에서 앱을 제거하여 첫 번째 로그인처럼 만들어주는 방법도 있습니다.
+
