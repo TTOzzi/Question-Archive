@@ -100,3 +100,27 @@ Apple 문서에 보면 Convenience init 은 '같은 클래스에서 다른 이�
 
 * [What the difference between designated and convenience init in this code below](https://stackoverflow.com/questions/29563147/what-the-difference-between-designated-and-convenience-init-in-this-code-below)
 * [What is the difference between convenience init vs init in swift, explicit examples better](https://stackoverflow.com/questions/40093484/what-is-the-difference-between-convenience-init-vs-init-in-swift-explicit-examp)
+
+----
+
+### Q.
+
+> loadView() 와 viewDidLoad() 의 차이가 무엇인가요?
+
+loadView() 와 viewDidLoad() 의 차이점은 무엇이고 각각 어떤 경우에 사용하나요? 
+
+그리고 코드만으로 UI 를 작성할 때는 view 를 그리는 코드를 loadView 에 작성해야 하나요?
+
+[질문 바로가기](https://yagom.net/forums/topic/loadview와-viewdidload-차이에-대한-질문입니다/)
+
+### A.
+
+* 좋은 글이 있어 공유 드립니다. 뷰가 그려질 때와 뷰가 로드될 때를 나눠서 생각해보시면 좋을 것 같습니다. [[iOS] View 가 Load 될 경우](https://mrgamza.tistory.com/279)
+* [loadView()](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621454-loadview) 메소드는 뷰 컨트롤러가 자신의 뷰, 그러니까 흔히 self.view 처럼 접근하는 그 뷰 컨트롤러의 메인 뷰를 로드할 때 호출되는 메소드입니다. 즉, 그 메인 뷰를 생성하려고 호출하는 메소드죠. 그래서 이 메소드 안에서 새로운 뷰를 만들어서 뷰 컨트롤러의 메인 뷰로 설정해줘도 됩니다. 뷰 컨트롤러의 기본 뷰를 커스텀 뷰로 사용하고자 할 때 유용합니다. 스토리보드를 쓰면 어차피 스토리보드에 있는 뷰를 가져와 쓸 테니 굳이 필요하지 않다고 볼 수 있겠네요.
+* [viewDidLoad()](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621495-viewdidload) 는 이 뷰가 모두 생성되고 메모리에 생성된 후에 호출되는 메소드입니다. 즉, `뷰 컨트롤러의 메인 뷰가 생성되었으니 이제 이 위에 하고 싶은 걸 해라` 라는 뜻으로 보면 되겠습니다. 뷰가 생성된 이후에 해야 할 동작을 viewDidLoad() 내부에 작성합니다.
+* [viewDidLoad() vs. loadView()(Swift3)](https://medium.com/yay-its-erica/viewdidload-vs-loadview-swift3-47f4ad195602), [viewDidLoad() Vs. loadView()](https://medium.com/swlh/viewdidload-vs-loadview-ddec6ac9bdd7) 이 글들도 참고해보면 좋고, 애플의 공식문서를 읽어봐도 도움이 될 것 같아요.
+
+### 참고할 만한 비슷한 질문들
+
+* [iPhone SDK: what is the difference between loadView and viewDidLoad?](https://stackoverflow.com/questions/573958/iphone-sdk-what-is-the-difference-between-loadview-and-viewdidload)
+* [what is the difference between loadView and viewDidLoad?](https://stackoverflow.com/questions/3423785/what-is-the-difference-between-loadview-and-viewdidload)
