@@ -133,6 +133,8 @@ loadView() 와 viewDidLoad() 의 차이점은 무엇이고 각각 어떤 경우�
 
 [App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/#sign-in-with-apple) 의 **Sign in with Apple** 에서는 다른 소셜 로그인 서비스를 사용하는 앱은 애플 로그인도 제공해야 한다고 합니다. 하지만 애플이 제공하는 [AuthenticationServices](https://developer.apple.com/documentation/authenticationservices) 프레임워크의 애플 로그인 기능은 iOS 13 이상만 지원합니다. iOS 13 미만에서도 애플 로그인을 구현해야 하나요?
 
+[질문 바로가기](https://developer.apple.com/forums/thread/122755?answerId=417003022#417003022)
+
 ### A.
 
 * iOS 가 아닌 다른 플랫폼이나 iOS 12 미만의 기기에서도 웹을 통해 애플 로그인을 구현할 수 있습니다. [available](https://docs.swift.org/swift-book/ReferenceManual/Attributes.html) 속성을 활용해 iOS 버전으로 분기처리를 하여 13 이상의 기기에서 실행되었을 때는 AuthenticationServices 으로 로그인을 하고, 13 미만의 기기에서는 [WKWebView](https://developer.apple.com/documentation/webkit/wkwebview) 로 애플 로그인이 구현된 웹페이지를 띄워줍니다. 자세한 구현은 [Sign in with Apple JS](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js) 와 [Incorporating Sign in with Apple into Other Platforms](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js/incorporating_sign_in_with_apple_into_other_platforms) 를 참고하세요.
