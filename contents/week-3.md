@@ -6,7 +6,7 @@
 
 여러 예제코드에서 Observable 을 subscribe 한 후 항상 disposed(by: disposebag) 를 사용하던데 dispose 를 사용하는 이유가 무엇인가요? 메모리 누수를 줄이기 위해서인가요? 만약 dispose 를 해주지 않으면 어떻게 되나요?
 
-[원본 질문 링크](https://yagom.net/forums/topic/rxswift-disposebag을-써야하는-이유/)
+[질문 바로가기](https://yagom.net/forums/topic/rxswift-disposebag을-써야하는-이유/)
 
 ### A.
 
