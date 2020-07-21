@@ -61,3 +61,26 @@
 
 -----
 
+### Q.
+
+> leading, trailing 과 left, right 의 차이가 무엇인가요?
+
+오토레이아웃을 공부하면서 left, right 보다는 leading, trailing 을 사용하는 것을 권장한다는 이야기를 많이 들었는데요.
+
+leading, trailing 과 left, right 는 어떤 차이가 있나요?
+
+[질문 바로가기](https://yagom.net/forums/topic/leading-trailing과-left-right/)
+
+### A.
+
+* leading, trailing 은 글의 시작방향과 끝방향을 뜻하는데요. 해당 기기의 언어 설정에 따라 유동적으로 변화합니다. 영어, 한국어 등의 LTR(left-to-right) 언어를 사용하는 기기에서는 leading 이 왼쪽, trailing 이 오른쪽이 되고 반대로 아랍어, 히브리어 등의 RTL(right-to-left) 언어를 사용하는 기기에서는 leading 이 오른쪽, trailing 이 왼쪽이 됩니다.
+* left, right 는 항상 화면에서의 왼쪽, 오른쪽을 가리킵니다.
+* [Auto Layout Guide: Rules of Thumb](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/WorkingwithConstraintsinInterfaceBuidler.html#//apple_ref/doc/uid/TP40010853-CH10-SW7) 에도 `Always use leading and trailing constraints instead of right and left.` 라는 문구가 있으니 UI 를 구성할 때 절대적으로 오른쪽, 왼쪽에 위치해야 하는 것이 아니라면 leading, trailing 을 사용하는 것을 권장합니다.
+
+### 참고할 만한 비슷한 질문들
+
+* [Difference between leftAnchor and leadingAnchor?](https://stackoverflow.com/questions/32981532/difference-between-leftanchor-and-leadinganchor/32981750)
+* [Difference between NSLayoutAttributeLeft vs NSLayoutAttributeLeading](https://stackoverflow.com/questions/19971508/difference-between-nslayoutattributeleft-vs-nslayoutattributeleading)
+
+-----
+
