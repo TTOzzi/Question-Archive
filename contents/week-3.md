@@ -120,7 +120,7 @@ class MyView: UIView {
 }
 ```
 
-![실행 영상](https://yagom.net/wp-content/uploads/2020/04/iboutlet3.gif)
+![실행 영상](https://user-images.githubusercontent.com/50410213/88182765-8d280a80-cc6b-11ea-9d7c-ee550fe455eb.gif)
 
 ### 참고할 만한 비슷한 질문들
 
