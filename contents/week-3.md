@@ -84,3 +84,49 @@ leading, trailing 과 left, right 는 어떤 차이가 있나요?
 
 -----
 
+### Q.
+
+> 왜 IBOutlet 을 weak var 로 선언하나요?
+
+스토리보드를 공부하던 도중 IBOutlet 을 weak var 로 선언하는 것에 의문이 생겼습니다.
+
+스토리보드에서 UI 를 생성했을 때, 스토리보드 내에서 해당 UI 의 인스턴스가 생성되는 건가요?
+
+IBOutlet 을 상수가 아닌 변수로 선언하는 이유가 무엇인가요?
+
+IBOutlet 을 strong 으로 선언해도 오류가 발생하지 않는데 필요에 따라 weak, strong 을 구분해서 써야한다고 합니다. 어떤 경우에 IBOutlet 을 strong 으로 선언하나요?
+
+참고한 글
+
+* [The difference between Weak & Strong in Swift](https://medium.com/@janakmshah/the-difference-between-weak-strong-in-swift-2c953cedd7c0)
+* [Should Outlets Be Weak or Strong](https://cocoacasts.com/should-outlets-be-weak-or-strong)
+
+[질문 바로가기](https://yagom.net/forums/topic/스토리보드와-인터페이스-빌더를-이용한-뷰-생성시/)
+
+### A.
+
+* 스토리보드에서 UI 를 생성하더라도 인스턴스가 스토리보드에서 생성되는 것은 아닙니다. 앱이 실행되어 뷰를 스토리보드에서 불러오는 순간에 스토리보드에 구성해 놓은 모양대로 뷰의 인스턴스가 생성되어 동작하게 됩니다. 즉, 스토리보드에는 어떤 뷰 클래스의 뷰가 어디에 위치할지 등의 정보만 담아두고, 실제로 뷰 클래스의 인스턴스가 생성되는 시점은 스토리보드로부터 뷰 구성 정보를 불러와서 화면에 보여주려 할 때(앱 동작 중) 입니다. 그래서 런타임 오류 발생 여지가 있어도 스토리보드에서는 오류가 발생하지 않고, 실행해서 화면이 보여지려고 하는 순간 오류로 앱이 죽죠. 스토리보드는 앱 동작 전에 이미 만들어져있으므로 스토리보드에 인스턴스가 생성된다고 볼 수는 없습니다. 그저 우리 눈에 그렇게 보이는 것뿐입니다.
+* IBOutlet 은 변수로만 선언 가능합니다. 상수는 불가능합니다. 그 이유는 위의 설명과 연관이 있는데요, 이미 IBOutlet 프로퍼티가 메모리에 생성된 후에 동적으로 스토리보드 정보로부터 만들어진 인스턴스를 IBOutlet 프로퍼티에 할당해야 하기 때문입니다. 그런데 해당 프로퍼티가 상수면 변경(할당)이 불가능하므로 항상 변수여야 합니다.
+* 통상 처음 배우는 분들은 뷰 컨트롤러의 뷰 위에 얹어지는 자식 뷰(subview)를 IBOutlet 프로퍼티로 지정하므로 그 기준으로 설명하겠습니다. 뷰 컨트롤러의 뷰 위에 얹어지는 자식 뷰를 IBOutlet 프로퍼티에 strong 으로 할당하면 자식 뷰의 retain count 가 1 증가합니다. IBOutlet 프로퍼티에 할당된 자식 뷰가 또 다른 뷰의 자식 뷰로 얹어지면 retain count 가 1 추가로 증가합니다. 그래서 뷰 컨트롤러의 뷰 위에 얹어진 자식 뷰의 retain count 는 IBOutlet 이 strong 으로 할당된 경우 기본적으로 2의 retain count 를 가집니다. 
+* 위의 설명처럼 strong 으로 선언해도 오류는 발생하지 않습니다. 다만 자식 뷰가 부모 뷰(superview)에서 떨어져 나와도 retain count 가 1이 남아있으므로 뷰 컨트롤러가 메모리에서 해제되기 전까지 IBOutlet 변수에 할당된 뷰는 메모리에서 해제되지 않습니다(물론 부모 뷰에서 떨어져 나온 후 IBOutlet 변수에 nil 을 할당하면 메모리에서 해제됩니다. 이해가 안되면 ARC 에 대해 조금 더 공부하면 좋습니다.). 이를 의도하고 strong 으로 선언한다면 괜찮습니다. 경우에 따라서  해당 뷰를 부모 뷰에 붙였다 뗐다 해야하는 경우엔 유용합니다. 하지만 이것도 뷰를 매번 붙였다([addSubview(_:)](https://developer.apple.com/documentation/uikit/uiview/1622616-addsubview)) 뗐다([removeFromSuperview()](https://developer.apple.com/documentation/uikit/uiview/1622421-removefromsuperview))하기 보다는 뷰를 잠깐 안 보이게 [isHidden](https://developer.apple.com/documentation/uikit/uiview/1622585-ishidden) 으로 숨겨주는 방법이 있습니다. 이때는 부모 뷰에서 실질적으로 떨어져 나온 것이 아니므로 retain count 의 변화는 없습니다. 그래서 통상 의도적인 목적이 없는 경우에는 IBOutlet 변수를 weak 로 선언하여 IBOutlet 인스턴스의 retain count 를 1로 만들어줍니다. 부모 뷰에서 떨어져 나오면 retain count 가 0이 되므로 바로 메모리에서 해제되죠.
+
+아래 영상을 보면 뷰를 스토리보드에 추가해주고 MyView 클래스를 뷰의 커스텀클래스로 지정해준 후 IBOutlet 을 strong 으로 선언했을 때, IBOutlet 변수에 할당된 뷰를 부모 뷰에서 제거해도 deinit 이 호출되지 않아요. 반대로 weak 로 선언한 후에 실행하면 뷰가 부모 뷰에서 제거된 이후에 deinit 이 호출되는 것을 확인할 수 있을 겁니다.
+
+```swift
+class MyView: UIView {
+    deinit {
+        print("뷰가 메모리에서 해제됨")
+    }
+}
+```
+
+![실행 영상](https://yagom.net/wp-content/uploads/2020/04/iboutlet3.gif)
+
+### 참고할 만한 비슷한 질문들
+
+* [Why can't an @IBOutlet be assigned let instead of var in Swift](https://stackoverflow.com/questions/46893514/why-cant-an-iboutlet-be-assigned-let-instead-of-var-in-swift)
+* [Why does Xcode create a weak reference for an IBOutlet?](https://stackoverflow.com/questions/21654113/why-does-xcode-create-a-weak-reference-for-an-iboutlet)
+* [What is the point of using weak variables in IBOutlets?](https://www.quora.com/What-is-the-point-of-using-weak-variables-in-IBOutlets)
+
+-----
+
