@@ -130,3 +130,91 @@ class MyView: UIView {
 
 -----
 
+### Q.
+
+> 메소드나 변수를 선언할 때 static 과 class 의 차이가 무엇인가요? 
+
+static 으로 선언된 메소드와 class 로 선언된 메소드의 차이가 무엇인가요?
+
+그리고 class 변수를 `class var = "classVar"` 이렇게 선언하니 에러가 나던데 class 변수를 사용할 수 있나요?
+
+[질문 바로가기](https://stackoverflow.com/questions/29636633/static-vs-class-functions-variables-in-swift-classes)
+
+### A.
+
+* static 과 class 둘 다 인스턴스가 아닌 타입 자체에서 호출합니다. 이 둘의 가장 큰 차이점은 서브클래스에서 class 로 선언된 프로퍼티나 메소드는 오버라이딩이 가능하고 static 은 오버라이딩이 불가능하다는 것입니다.
+
+  ```swift
+  class SuperClass {
+      class func classFunc() {
+          print("class function")
+      }
+      
+      static func staticFunc() {
+          print("static function")
+      }
+  }
+  
+  class SubClass: SuperClass {
+      override class func classFunc() {
+          print("override class function")
+      }
+  
+      // Cannot override static method 에러 발생
+      override static func staticFunc() {
+          print("override static function")
+      }
+  }
+  ```
+
+  위 예시코드를 보면 static 으로 선언한 메소드를 오버라이드 하려 하면 static 은 오버라이드 할 수 없다는 컴파일 에러가 발생합니다.
+
+  ```swift
+  class SuperClass {
+      // Class stored properties not supported in classes; did you mean 'static'? 에러 발생
+      class var classVar: String = "class variable"
+      
+      class var computedClassVar: String {
+          return "class variable"
+      }
+      
+      static var staticVar: String = "static variable"
+  }
+  
+  class SubClass: SuperClass {
+      override class var computedClassVar: String {
+          return "override class variable"
+      }
+      
+      // Cannot override with a stored property 'staticVar' 에러 발생
+      override static var staticVar: String = "override static variable"
+  }
+  ```
+
+  그리고 class 프로퍼티는 연산 프로퍼티로만 선언할 수 있습니다. 저장 프로퍼티를 선언하고 싶다면 static 을 사용해야 합니다. 프로퍼티 역시 메소드와 같이 class 로 선언한 프로퍼티만 오버라이딩이 가능합니다.
+
+  ```swift
+  struct CustomStruct {
+      // Class properties are only allowed within classes; use 'static' to declare a static property 에러 발생
+      class var classVar: String {
+          return "class variable"
+      }
+      // Class methods are only allowed within classes; use 'static' to declare a static method 에러 발생
+      class func classFunc() {
+          print("class function")
+      }
+  }
+  ```
+
+  추가로 구조체에서는 상속과 오버라이딩이 불가능하므로 static 만 사용가능합니다.
+
+* 정리하자면 class 에서 오버라이딩이 필요한 정적 프로퍼티와 메소드를 선언해야 할 때만 class 를 쓰고 그게 아니라면 static 으로 선언하면 됩니다. 좀 더 자세한 내용은 [Swift: Methods - Type Methods](https://docs.swift.org/swift-book/LanguageGuide/Methods.html#ID241) 를 읽어보세요!
+
+### 참고할 만한 비슷한 질문들
+
+* [static vs class as class variable/method (Swift)](https://stackoverflow.com/questions/29206465/static-vs-class-as-class-variable-method-swift)
+* [What is the difference between static func and class func in Swift](https://stackoverflow.com/questions/25156377/what-is-the-difference-between-static-func-and-class-func-in-swift)
+* [Class variables not yet supported](https://stackoverflow.com/questions/24015207/class-variables-not-yet-supported)
+
+-----
+
