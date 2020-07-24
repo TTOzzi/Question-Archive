@@ -218,3 +218,61 @@ static 으로 선언된 메소드와 class 로 선언된 메소드의 차이가 
 * [static vs class as class variable/method (Swift)](https://stackoverflow.com/questions/29206465/static-vs-class-as-class-variable-method-swift)
 * [What is the difference between static func and class func in Swift](https://stackoverflow.com/questions/25156377/what-is-the-difference-between-static-func-and-class-func-in-swift)
 * [Class variables not yet supported](https://stackoverflow.com/questions/24015207/class-variables-not-yet-supported)
+
+----
+
+### Q.
+
+> 클로저 앞의 @escaping 은 무엇인가요?
+
+함수에서 인자로 클로저를 받을 때 클로저 앞에 @escaping 이 있는 경우가 많던데 어떤 경우에 @escaping 을 사용하나요?
+
+[질문 바로가기](https://stackoverflow.com/questions/39504180/escaping-closures-in-swift)
+
+### A.
+
+* 스위프트에서 인자로 전달되는 모든 클로저의 기본값은 @noescape 입니다. 따로 인자 앞에 @escaping 을 명시하지 않으면 @noescape 로 인식하게 됩니다. @noescape 클로저는 함수 내부에서만 호출할 수 있으며 함수가 종료되면 메모리에서 해제됩니다. 하지만 함수가 반환된 후에 클로저가 필요한 경우가 있습니다. 주로 클로저를 다른 곳에 넘겨주어 저장해두거나, 비동기 작업의 completion 이 필요할 때 @escaping 을 사용합니다. @escaping 은 함수의 인자로 클로저가 전달되고 그 클로저가 함수가 반환된 후에 호출될 때 사용합니다.
+
+* ```swift
+  func noescapeClosure(closure: () -> Void) {
+      closure()
+  }
+  
+  func noescapeClosureWithAsync(closure: () -> Void) {
+      // Escaping closure captures non-escaping parameter 'closure' 에러 발생
+      DispatchQueue.main.async {
+          closure()
+      }
+  }
+  
+  func escapingClosure(closure: @escaping () -> Void) {
+      DispatchQueue.main.async {
+          closure()
+      }
+  }
+  ```
+
+  noescapeClosure(closure:) 함수는 함수가 종료되기 전에 클로저를 호출하므로 @escaping 을 선언할 필요가 없습니다. 하지만 noescapeClosureWithAsync(closure:) 함수는 비동기 방식으로 클로저를 호출하기 때문에 함수가 종료된 후 클로저가 호출될 가능성이 있으므로(반드시 함수가 종료된 후에 호출되어야 하는 것은 아닙니다.) @escaping 을 선언해주지 않으면 컴파일 에러가 발생합니다.
+
+* ```swift
+  var completionHandlers: [() -> Void] = []
+  
+  func appendNoescapeClosure(closure: () -> Void) {
+      // Converting non-escaping parameter 'closure' to generic parameter 'Element' may allow it to escape 에러 발생
+      completionHandlers.append(closure)
+  }
+  
+  func appendEscapingClosure(closure: @escaping () -> Void) {
+      completionHandlers.append(closure)
+  }
+  ```
+
+  클로저를 인자로 받아 completionHandlers 배열에 저장하는 함수입니다. 인자로 받은 클로저를 함수 범위 밖의 배열에 저장하기 때문에 이 경우에도 @escaping 을 선언해주지 않으면 컴파일 에러가 발생합니다.
+
+* 더 자세한 정보는 [Swift: Closures - Escaping Closures](https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID546) 읽어보세요!
+
+### 참고할 만한 비슷한 질문들
+
+* [Swift @escaping and Completion Handler](https://stackoverflow.com/questions/46245517/swift-escaping-and-completion-handler)
+* [In Swift, What is the difference between (() -> ()) and @escaping () -> Void?](https://stackoverflow.com/questions/61492303/in-swift-what-is-the-difference-between-and-escaping-void)
+* [@escaping closure actually runs before return](https://stackoverflow.com/questions/49614905/escaping-closure-actually-runs-before-return)
