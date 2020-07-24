@@ -17,6 +17,11 @@
 9. [loadView() 와 viewDidLoad() 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-2.md#q-3)
 10. [iOS 13 미만에서도 애플 로그인을 구현해야 하나요? 구현해야 한다면 어떻게 구현하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-2.md#q-4)
 11. [기기에서 애플 로그인을 할 때 사용자 정보(이름, 이메일)가 안 받아져요.](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-2.md#q-5)
+12. [RxSwift 에서 DisposeBag 을 쓰는 이유가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-3.md#q)
+13. [leading, trailing 과 left, right 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-3.md#q-1)
+14. [왜 IBOutlet 을 weak var 로 선언하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-3.md#q-2)
+15. [메소드나 변수를 선언할 때 static 과 class 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-3.md#q-3)
+16. [클로저 앞의 @escaping 은 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-3.md#q-4)
 
 #### 참고한 커뮤니티
 * [야곰닷넷](https://yagom.net/)
