@@ -218,6 +218,3 @@ static 으로 선언된 메소드와 class 로 선언된 메소드의 차이가 
 * [static vs class as class variable/method (Swift)](https://stackoverflow.com/questions/29206465/static-vs-class-as-class-variable-method-swift)
 * [What is the difference between static func and class func in Swift](https://stackoverflow.com/questions/25156377/what-is-the-difference-between-static-func-and-class-func-in-swift)
 * [Class variables not yet supported](https://stackoverflow.com/questions/24015207/class-variables-not-yet-supported)
-
------
-
