@@ -142,6 +142,8 @@
 
 guard 를 사용해 조건문을 작성하면 if 를 사용할 때와 어떤 차이가 있나요?
 
+[질문 바로가기](https://stackoverflow.com/questions/30791488/swifts-guard-keyword)
+
 ### A.
 
 * 먼저 if 를 사용한 코드입니다.
