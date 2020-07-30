@@ -87,7 +87,7 @@
 
   ![responderchain](https://user-images.githubusercontent.com/50410213/88822217-8adf2680-d1fe-11ea-9c5e-1f9a74b3de5d.png)
 
-  앱의 UI event 는 일반적으로 UIApplication -> [UIWindow](https://developer.apple.com/documentation/uikit/uiwindow) -> [UIViewController](https://developer.apple.com/documentation/uikit/uiviewcontroller) -> [UIView](https://developer.apple.com/documentation/uikit/uiview) -> subviews(UILabel, [UIButton](https://developer.apple.com/documentation/uikit/uibutton) 등) 와 같이 chain 으로 연결되는데, 이 [responder chain](https://developer.apple.com/documentation/uikit/touches_presses_and_gestures/using_responders_and_the_responder_chain_to_handle_events) 을 따라 UIApplication 으로 전달됩니다. 이러한 event chain 이 메인 스레드에서 동작하므로 responder chain 에 포함된 모든 UI 관련 동작들은 메인 스레드에서 수행되어야 합니다. 
+  앱의 UI event 는 일반적으로 UIApplication -> [UIWindow](https://developer.apple.com/documentation/uikit/uiwindow) -> [UIViewController](https://developer.apple.com/documentation/uikit/uiviewcontroller) -> [UIView](https://developer.apple.com/documentation/uikit/uiview) -> subviews([UILabel](https://developer.apple.com/documentation/uikit/uilabel), [UIButton](https://developer.apple.com/documentation/uikit/uibutton) 등) 와 같이 chain 으로 연결되는데, 이 [responder chain](https://developer.apple.com/documentation/uikit/touches_presses_and_gestures/using_responders_and_the_responder_chain_to_handle_events) 을 따라 UIApplication 으로 전달됩니다. 이러한 event chain 이 메인 스레드에서 동작하므로 responder chain 에 포함된 모든 UI 관련 동작들은 메인 스레드에서 수행되어야 합니다. 
 
   간단하게 요약하자면 UI 와 관련된 모든 이벤트 처리를 메인 스레드에서 하므로 UI 업데이트는 반드시 메인 스레드에서 해야 합니다. [UIKit 공식문서](https://developer.apple.com/documentation/uikit)에서도 **Important** 로 메인 스레드에서의 UI 업데이트를 강조하고 있습니다.
 
