@@ -108,3 +108,28 @@
 * [Why must UIKit operations be performed on the main thread?](https://stackoverflow.com/questions/18467114/why-must-uikit-operations-be-performed-on-the-main-thread)
 * [iOS) 왜 main.sync 를 하면 안될까](https://zeddios.tistory.com/519)
 * [iOS: Why the UI need to be updated on Main Thread](https://medium.com/@duwei199714/ios-why-the-ui-need-to-be-updated-on-main-thread-fd0fef070e7f)
+
+----
+
+### Q.
+
+> 클래스 이름의 NS 접두사의 의미가 무엇인가요?
+
+[Cocoa / Cocoa Touch](https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/Cocoa.html) 의 많은 클래스의 이름에 NS 접두사가 붙어있는 것을 볼 수 있었는데요. 어떤 의미인가요?
+
+[질문 바로가기](https://stackoverflow.com/questions/473758/what-does-the-ns-prefix-mean)
+
+### A.
+
+* 먼저 NS 접두사를 이해하려면 [Objective-C](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html) 의 특징을 알아야합니다. Objective-C 는 동적이고 객체 지향적으로 C 언어를 확장한 언어입니다. C 언어를 확장했기에 C++ 의 [namespace](https://docs.microsoft.com/ko-kr/cpp/cpp/namespaces-cpp?view=vs-2019) 같은 기능이 없습니다. 그래서 전역 namespace 에서 이름 충돌을 피하기위해 접두사가 필요합니다. 자기 자신만 사용할 목적으로 작성한 코드에서는 이 충돌을 신경쓰지 않아도 되지만, 다른 사람이 사용할 수 있도록 프레임워크 또는 라이브러리를 작성하는 경우 고유 접두사를 붙여야합니다. [Coding Guidelines for Cocoa](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingBasics.html#//apple_ref/doc/uid/20001281-1002226-BBCJECED) 과 [Google Objective-C Style Guide](https://google.github.io/styleguide/objcguide.html#prefixes) 에 접두사에 대한 설명이 있습니다. [CocoaDev: ChooseYourOwnPrefix](http://cocoadev.github.io/ChooseYourOwnPrefix/) 를 보면 Cocoa community 의 수많은 개발자가 자신이 선택한 고유한 접두사를 기록해놓은 것을 볼 수 있습니다.
+
+  Cocoa 프레임워크는 [NeXTSTEP](https://en.wikipedia.org/wiki/NeXTSTEP) 운영체제용 앱을 만들기 위한 코드로부터 시작되었습니다. 1996년 애플이 다시 NeXT 를 인수했을 때 기존 클래스 이름을 포함하여 NeXTSTEP 의 라이브러리인 Foundation 과 AppKit 이 OS X 에 통합되었습니다(애플의 Cocoa 프레임워크에서는 현재까지도 같은 이름을 사용 중입니다). 이때 NeXTSTEP 의 개발자들은 앞서 설명한 충돌을 피하기 위한 접두사를 이름 앞에 추가하였는데, 이것이 바로 **NS** 입니다.
+
+* NS 접두사가 붙어있는 타입들은 Swift 가 나오기 전 Objective-C 에서 사용되었던 타입들입니다. [Working with Foundation Types](https://developer.apple.com/documentation/swift/imported_c_and_objective-c_apis/working_with_foundation_types) 를 보면 알 수 있듯이 현재는 대부분의 NS 타입들이 Swift 의 타입들로 Bridge 되어 있어 Swift 의 타입들을 많이 사용하지만, NS 타입만의 고유한 특성을 활용하기 위해 NS 타입을 사용하기도 합니다. 
+
+### 참고할 만한 비슷한 질문들
+
+* [Swift - which types to use? NSString or String](https://stackoverflow.com/questions/24038629/swift-which-types-to-use-nsstring-or-string/24038680)
+* [Error 와 NSError 의 차이가 무엇인가요?](https://yagom.net/forums/topic/기초적인-swift-문법-질문드립니다-ㅠㅠ/)
+* [What is difference between NSDictionary vs Dictionary in Swift?](https://stackoverflow.com/questions/25554259/what-is-difference-between-nsdictionary-vs-dictionary-in-swift)
+* [What are these NS prefixed types?](https://forums.swift.org/t/what-are-these-ns-prefixed-types/19045)
