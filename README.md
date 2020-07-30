@@ -22,6 +22,10 @@
 14. [왜 IBOutlet 을 weak var 로 선언하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-3.md#q-2)
 15. [메소드나 변수를 선언할 때 static 과 class 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-3.md#q-3)
 16. [클로저 앞의 @escaping 은 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-3.md#q-4)
+17. [class 와 final class 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-4.md#q)
+18. [UI 업데이트는 왜 메인 스레드에서만 해야 하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-4.md#q-1)
+19. [클래스 이름의 NS 접두사의 의미가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-4.md#q-2)
+20. [guard 와 if 의 차이점이 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-4.md#q-3)
 
 #### 참고한 커뮤니티
 * [야곰닷넷](https://yagom.net/)
