@@ -133,3 +133,78 @@
 * [Error 와 NSError 의 차이가 무엇인가요?](https://yagom.net/forums/topic/기초적인-swift-문법-질문드립니다-ㅠㅠ/)
 * [What is difference between NSDictionary vs Dictionary in Swift?](https://stackoverflow.com/questions/25554259/what-is-difference-between-nsdictionary-vs-dictionary-in-swift)
 * [What are these NS prefixed types?](https://forums.swift.org/t/what-are-these-ns-prefixed-types/19045)
+
+----
+
+### Q.
+
+> guard 와 if 의 차이점이 무엇인가요?
+
+guard 를 사용해 조건문을 작성하면 if 를 사용할 때와 어떤 차이가 있나요?
+
+### A.
+
+* 먼저 if 를 사용한 코드입니다.
+
+  ```swift
+  func foo(x: Int?) {
+      if let x = x where x > 0 {
+          // 조건을 만족했을 때 실행할 코드를 이곳에 작성합니다.
+      } else {
+          // 조건을 만족하지 못했을 때 실행할 코드를 이곳에 작성합니다.
+      }
+      // 이곳에 작성하는 코드는 위 조건과 관계없이 실행되게 됩니다.
+  }
+  ```
+
+  if 안에 조건을 만족했을 때 실행할 코드들을 모두 작성하게 됩니다. if 블록을 벗어나면 옵셔널 바인딩 된 x 는 사용할 수 없습니다. guard 와는 달리 if 밖에서 조건과 관계없이 실행되는 코드를 작성할 수 있습니다.
+
+* guard 를 사용한 코드입니다.
+
+  ```swift
+  func foo(x: Int?) {
+      guard let x = x where x > 0 else {
+          // 조건을 만족하지 못했을 때 실행할 코드를 이곳에 작성합니다.
+          return
+      }
+  
+      // 조건을 만족했을 때 실행할 코드를 이곳에 작성합니다.
+  }
+  ```
+
+  조건을 만족하지 않으면 else 문이 실행되어 else 문 안의 코드를 실행하고 함수를 종료합니다. guard 를 사용하면 조건을 만족하지 않을 땐 항상 continue, break, return 등을 사용하여 guard 가 선언된 스코프를 빠져나가야 합니다. 
+
+  조건을 만족하면 현재 함수 내 guard 문이 실행된 이후의 모든 범위에서 옵셔널 바인딩 한 x 를 사용할 수 있습니다.
+
+* 몇가지 팁을 드리자면, if 안에 스코프를 빠져나가는 코드가 있는 경우에는 guard 로 바꾸는 것이 좋습니다. 예외처리를 할 때도 guard 를 사용하면 좀 더 명시적인 예외처리가 가능합니다. if 가 여러개 중첩되어 코드 줄바꿈의 깊이가 깊어졌을 때도 guard 를 사용하면 깊이를 줄이고 가독성을 향상시킬 수 있습니다.
+
+  ```swift
+  func isZero(x: String) -> Bool? {
+      if let x = Int(x) {
+          if x == 0 {
+              return true
+          } else {
+              return false
+          }
+      } else {
+          return nil
+      }
+  }
+  ```
+
+  ```swift
+  func isZero(x: String) -> Bool? {
+      guard let x = Int(x) else { return nil }
+      guard x == 0 else { return false }
+      return true
+  }
+  ```
+
+  String 을 인자로 받아 Int 로 변환하고, 그 값이 0 인지 아닌지 확인하는 함수입니다. 인자로 받은 문자열이 숫자가 아니면 nil 을 반환하고 0이면 true, 0이 아니면 false 를 반환합니다. if 를 사용해서 구현한 함수보다 guard 를 사용한 함수가 코드의 깊이도 얕고, 어떤 때에 어떤 값을 반환하는지 좀 더 명확하게 알 수 있는 것을 확인할 수 있습니다.
+
+* if 보다 guard 를 사용했을 때 더 좋은 상황이 많지만, if 를 사용해야만 하는 상황도 있으므로 위의 특징들을 참고해서 본인이 작성한 코드의 상황에 맞게 사용하시면 됩니다.
+
+### 참고할 만한 비슷한 질문들
+
+* [Swift: guard let vs if let](https://stackoverflow.com/questions/32256834/swift-guard-let-vs-if-let)
+* [What is basic difference between guard statement and if...else statement?](https://stackoverflow.com/questions/34703089/what-is-basic-difference-between-guard-statement-and-if-else-statement/34703255)
