@@ -201,7 +201,7 @@ UIView 과 UIView 를 상속받는 모든 뷰들은 frame 과 bounds 를 가지�
 
 * [FrameVsBounds](https://github.com/maniramezan/FrameVsBounds) 이곳에 frame 과 bounds 의 변화를 한눈에 보기 쉽게 만든 앱이 있습니다. 글만으론 frame 과 bounds 의 차이가 이해가 잘 안 된다면 참고해보세요.
 
-  ![sample](https://github.com/maniramezan/FrameVsBounds/blob/master/images/IMG_E5039F2BB59E-1.jpeg?raw=true)
+  <img width="40%" alt="sample" src="https://github.com/maniramezan/FrameVsBounds/blob/master/images/IMG_E5039F2BB59E-1.jpeg?raw=true">
 
 ### 참고할 만한 비슷한 질문들
 
