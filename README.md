@@ -27,8 +27,8 @@
 19. [클래스 이름의 NS 접두사의 의미가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-4.md#q-2)
 20. [guard 와 if 의 차이점이 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-4.md#q-3)
 21. [왜 delegate 를 weak 으로 선언하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-5.md#q)
-22. [frame 과 bounds 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-5.md#q1)
-23. [App Transport Security 가 HTTP 통신을 차단해요.](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-5.md#q2)
+22. [frame 과 bounds 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-5.md#q-1)
+23. [App Transport Security 가 HTTP 통신을 차단해요.](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-5.md#q-2)
 
 #### 참고한 커뮤니티
 * [야곰닷넷](https://yagom.net/)
