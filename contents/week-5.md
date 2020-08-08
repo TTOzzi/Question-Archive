@@ -90,7 +90,7 @@ delegation 패턴에서 delegate 가 weak 로 선언된 것을 확인할 수 있
 
 * weak 으로 선언하지 않아도 되는 경우도 있으나, 복잡한 구조의 코드에서 weak 로 선언하지 않은 delegate 는 예상치 못한 retain cycle 을 발생시킬 수 있으니 weak 으로 선언하는 것을 권장합니다.
 
-### 참고할 만한 비슷한 질문들
+### 참고할 만한 비슷한 질문, 자료
 
 * [Swift delegation - when to use weak pointer on delegate](https://stackoverflow.com/questions/30056526/swift-delegation-when-to-use-weak-pointer-on-delegate?rq=1)
 * [How can I make a weak protocol reference in 'pure' Swift (without @objc)](https://stackoverflow.com/questions/24066304/how-can-i-make-a-weak-protocol-reference-in-pure-swift-without-objc)
@@ -203,8 +203,60 @@ UIView 과 UIView 를 상속받는 모든 뷰들은 frame 과 bounds 를 가지�
 
   <img width="40%" alt="sample" src="https://github.com/maniramezan/FrameVsBounds/blob/master/images/IMG_E5039F2BB59E-1.jpeg?raw=true">
 
-### 참고할 만한 비슷한 질문들
+### 참고할 만한 비슷한 질문, 자료
 
 * [UIView frame, bounds and center](https://stackoverflow.com/questions/5361369/uiview-frame-bounds-and-center)
 * [iOS ) Frame과 Bounds의 차이 (1/2)](https://zeddios.tistory.com/203)
 * [Stanford University - CS193P: Views, Drawing, Animation](https://www.slideshare.net/profmido/05-views)
+
+----
+
+### Q.
+
+> App Transport Security 가 HTTP 통신을 차단해요.
+
+<img width="1106" alt="스크린샷 2020-08-08 오전 10 31 52" src="https://user-images.githubusercontent.com/50410213/89701206-90abd900-d96f-11ea-8c6b-5cef47c9e8f6.png">
+
+App Transport Security 에 의해 http 리소스 로드가 차단됩니다. 차단을 해제하려면 Info.plist 를 어떻게 수정해야 하나요?
+
+[질문 바로가기](https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http/32560433#32560433)
+
+### A.
+
+* [ATS(App Transport Security)](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) 는 iOS 9 에서 도입된 개인정보 보호 기능입니다. 앱의 네트워크 연결을 취약점이 없는 산업 표준 프로토콜과 암호만 사용하도록 하여 개인 정보 보호 및 [데이터 무결성](https://ko.wikipedia.org/wiki/데이터_무결성)을 향상시킵니다. 이는 사용자가 개인 정보 유출에 대한 걱정 없이 앱을 사용할 수 있도록 해줍니다.
+
+* 앱에서 네트워크 통신을 할 때 HTTPS 가 아닌 HTTP 를 쓰게 된다면 네트워크 통신에서 안전성을 보장하지 못하므로 ATS 가 보안을 위해 차단하게 됩니다. HTTP 를 꼭 사용해야만 한다면 Info.plist 에서 특정 도메인에 대해 예외처리를 해줄 수 있습니다.
+
+  <img width="534" alt="스크린샷 2020-08-08 오전 11 02 29" src="https://user-images.githubusercontent.com/50410213/89704007-446e9200-d98b-11ea-8f72-120a4e03bb4f.png">
+
+  먼저 + 버튼을 눌러 `Information Property List` 에 `App Transport Security Settings` 를 추가합니다.  `App Transport Security Settings` 에 예외처리할 도메인들을 담을 `Exception Domains` 를 만든 후, 예외처리할 도메인(예시에서는 `randomuser.me`)을 추가하고, `NSTemporaryExceptionAllowsInsecureHTTPLoads` 를 YES 로 설정해줍니다. 
+
+  코드로 추가한다면 다음과 같습니다. Info.plist 에 마우스 오른쪽 클릭을 하면 나오는 메뉴에서 Open As -> Source Code 를 누르면 코드로 키를 추가할 수 있습니다.
+
+  <img width="456" alt="스크린샷 2020-08-08 오후 3 37 11" src="https://user-images.githubusercontent.com/50410213/89704231-096d5e00-d98d-11ea-9310-3acd44a94b8b.png">
+
+  기존 `<plist>` 의 `<dict>` 안에 아래의 코드블럭을 추가하면 됩니다.
+
+  ```swift
+  <key>NSAppTransportSecurity</key>
+  <dict>
+  	<key>NSExceptionDomains</key>
+  	<dict>
+  		<key>randomuser.me</key>
+  		<dict>
+  			<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+  			<true/>
+  		</dict>
+  	</dict>
+  </dict>
+  ```
+
+* `App Transport Security Settings` 의  `Allow Arbitrary Loads` 를 Yes 로 설정하여 ATS 를 비활성화하는 방법도 있지만, 디버깅이나 개발 과정에서만 사용하고 실제 앱 출시에는 보안 문제가 발생할 수 있으므로 권장하지 않습니다.
+
+* 이 외에도 ATS 의 설정을 바꿀 수 있는 여러 가지 키들이 존재합니다. 더 자세한 정보는 [App Transport Security dictionary primary keys](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW34) 와 [Exception domains dictionary keys](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW44) 를 참고하세요.
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [How can I add NSAppTransportSecurity to my info.plist file?](https://stackoverflow.com/questions/31216758/how-can-i-add-nsapptransportsecurity-to-my-info-plist-file/31629980#31629980)
+* [HTTP VS HTTPS 차이, 알면 사이트의 레벨이 보인다.](http://blog.wishket.com/http-vs-https-차이-알면-사이트의-레벨이-보인다/)
+* [SSL, TLS, HTTPS 의 정의](https://www.digicert.com/kr/what-is-ssl-tls-https/)
