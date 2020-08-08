@@ -4,13 +4,13 @@
 
 > 왜 delegate 를 weak 으로 선언하나요?
 
-delegation 패턴에서 delegate 가 weak 로 선언된 것을 확인할 수 있는데요. 왜 delegate 를 weak 로 선언하나요?
+delegation 패턴에서 delegate 가 weak 으로 선언된 것을 확인할 수 있는데요. 왜 delegate 를 weak 으로 선언하나요?
 
 [질문 바로가기](https://stackoverflow.com/questions/8449040/why-use-weak-pointer-for-delegation)
 
 ### A.
 
-* [retain cycle](https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html#ID51) 을 피하기 위해 delegate 를 weak 로 선언합니다. retain cycle 은 두 클래스 인스턴스가 서로에 대한 강력한 참조를 가질 때 발생합니다.
+* [retain cycle](https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html#ID51) 을 피하기 위해 delegate 를 weak 으로 선언합니다. retain cycle 은 두 클래스 인스턴스가 서로에 대한 강력한 참조를 가질 때 발생합니다.
 
   흔히 사용되는 UITableView 로 예를 들어보겠습니다. 
 
@@ -35,7 +35,7 @@ delegation 패턴에서 delegate 가 weak 로 선언된 것을 확인할 수 있
 
   <img width="420" alt="스크린샷 2020-08-05 오후 10 02 26" src="https://user-images.githubusercontent.com/50410213/89417638-e31ba880-d769-11ea-8b63-42df3e364f91.png">
 
-  ViewController 가 tableView 를 강력하게 참조하고, tableView 의 delegate 가 ViewController 를 약하게 참조합니다. 공식문서에서 UITableView 의 [delegate](https://developer.apple.com/documentation/uikit/uitableview/1614894-delegate) 를 찾아보면 weak 로 선언되어있는 것을 확인할 수 있습니다.
+  ViewController 가 tableView 를 강력하게 참조하고, tableView 의 delegate 가 ViewController 를 약하게 참조합니다. 공식문서에서 UITableView 의 [delegate](https://developer.apple.com/documentation/uikit/uitableview/1614894-delegate) 를 찾아보면 weak 으로 선언되어있는 것을 확인할 수 있습니다.
 
   ```swift
   weak var delegate: UITableViewDelegate? { get set }
@@ -86,9 +86,9 @@ delegation 패턴에서 delegate 가 weak 로 선언된 것을 확인할 수 있
 
   delegate 를 담당하는 별도의 객체를 생성함으로써 customView 내부에 delegate 를 weak 으로 선언하지 않았지만, retain cycle 이 발생하지 않습니다. 
 
-  추가로 delegate 를 구조체로 지정하는 경우에도 weak 를 사용하지 않아도 됩니다. 구조체는 값 유형이기 때문에 retain cycle 을 발생시키지 않습니다.
+  추가로 delegate 를 구조체로 지정하는 경우에도 weak 을 사용하지 않아도 됩니다. 구조체는 값 유형이기 때문에 retain cycle 을 발생시키지 않습니다.
 
-* weak 으로 선언하지 않아도 되는 경우도 있으나, 복잡한 구조의 코드에서 weak 로 선언하지 않은 delegate 는 예상치 못한 retain cycle 을 발생시킬 수 있으니 weak 으로 선언하는 것을 권장합니다.
+* weak 으로 선언하지 않아도 되는 경우도 있으나, 복잡한 구조의 코드에서 weak 으로 선언하지 않은 delegate 는 예상치 못한 retain cycle 을 발생시킬 수 있으니 weak 으로 선언하는 것을 권장합니다.
 
 ### 참고할 만한 비슷한 질문, 자료
 
@@ -199,7 +199,7 @@ UIView 과 UIView 를 상속받는 모든 뷰들은 frame 과 bounds 를 가지�
 
   * bounds 는 [draw(_:)](https://developer.apple.com/documentation/uikit/uiview/1622529-drawrect) 를 활용해 뷰 내부에 그림을 그리거나, transform 변형한 뷰의 크기를 알고 싶을 때, 자식 뷰를 정렬하는 것과 같이 내부적인 변경을 수행할 때 사용합니다.
 
-* [FrameVsBounds](https://github.com/maniramezan/FrameVsBounds) 이곳에 frame 과 bounds 의 변화를 한눈에 보기 쉽게 만든 앱이 있습니다. 글만으론 frame 과 bounds 의 차이가 이해가 잘 안 된다면 참고해보세요.
+* [FrameVsBounds](https://github.com/maniramezan/FrameVsBounds) 에 frame 과 bounds 의 변화를 한눈에 보기 쉽게 만든 앱이 있습니다. 글만으론 frame 과 bounds 의 차이가 이해가 잘 안 된다면 참고해보세요.
 
   <img width="40%" alt="sample" src="https://github.com/maniramezan/FrameVsBounds/blob/master/images/IMG_E5039F2BB59E-1.jpeg?raw=true">
 
