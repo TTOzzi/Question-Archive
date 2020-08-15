@@ -50,7 +50,7 @@
 
   <img width="456" alt="스크린샷 2020-08-16 오전 12 44 22" src="https://user-images.githubusercontent.com/50410213/90315863-b598e100-df59-11ea-9c0a-433f4f912daf.png">
 
-  Xcode 의 Debug navigator 를 보면 브레이크포인트가 설정된 코드가 실행된 큐와 스레드, 그리고 해당 큐가 관리 중인 스레드들도 확인할 수 있습니다.
+  Xcode 의 Debug navigator 를 보면 브레이크포인트가 설정된 코드가 실행된 큐와 스레드, 그리고 해당 큐가 관리 중인 스레드들도 확인할 수 있습니다. 지금은 큐가 하나뿐이지만 사용하는 큐가 더 많아지고, 해야 하는 작업량도 많아진다면 label 을 통해 큐를 구분할 수 있으니 디버깅하기 편해지겠죠?
 
   <img width="458" alt="스크린샷 2020-08-16 오전 1 16 24" src="https://user-images.githubusercontent.com/50410213/90316593-22ae7580-df5e-11ea-925c-889c446a2d58.png">
 
