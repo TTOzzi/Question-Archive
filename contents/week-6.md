@@ -10,7 +10,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
 
 ### A.
 
-* 먼저 DispatchQueue.main 에서 sync 를 호출하면 안 되는 이유를 이해하려면 [Deadlock(교착 상태)](https://ko.wikipedia.org/wiki/교착_상태) 이란 개념을 알아야 하는데요. Deadlock 이란 `두 개 이상의 작업이 서로 상대방의 작업이 끝나기만을 기다리고 있기 때문에 결과적으로 아무것도 완료되지 못하는 상태` 라고 합니다. Deadlock 은 DispatchQueue.main 뿐만 아니라 백그라운드 스레드가 할당된 큐에서도 발생할 수 있습니다.
+* 먼저 DispatchQueue.main 에서 sync 를 호출하면 안 되는 이유를 이해하려면 [Deadlock(교착 상태)](https://ko.wikipedia.org/wiki/교착_상태) 이란 개념을 알아야 하는데요. Deadlock 이란 `두 개 이상의 작업이 서로 상대방의 작업이 끝나기만을 기다리고 있기 때문에 결과적으로 아무것도 완료되지 못하는 상태` 라고 합니다. Deadlock 은 DispatchQueue.main 뿐만 아니라 백그라운드 스레드를 관리하는 큐에서도 발생할 수 있습니다.
 
 * 간단한 코드로 예를 들어보겠습니다. DispatchQueue 의 생성자로 myQueue 를 생성해주었습니다. 생성자의 attributes 를 concurrent 로 설정해주지 않으면 기본값으로 serial queue 를 생성하게 됩니다.
 
