@@ -2,6 +2,102 @@
 
 ### Q.
 
+> DispatchQueue.global() 과 DispatchQueue.init() 의 차이가 무엇인가요?
+
+백그라운드 스레드를 관리하는 큐를 생성하고 싶은데요. [DispatchQueue.global()](https://developer.apple.com/documentation/dispatch/dispatchqueue/2300077-global) 으로 생성하는 방법과 [DispatchQueue.init()](https://developer.apple.com/documentation/dispatch/dispatchqueue/2300059-init) 으로 label 을 설정하여 생성하는 방법에는 어떤 차이가 있나요?
+
+[질문 바로가기](https://stackoverflow.com/questions/53489764/understanding-dispatch-queue-threading/53489813#53489813)
+
+### A.
+
+* DispatchQueue.global() 은 인자로 받은 우선순위에 해당하는 전역 시스템 큐를 반환합니다. 이 전역 시스템 큐는 여러 작업을 동시에 수행하는 concurrent queue 입니다.
+
+* DispatchQueue 의 생성자로 만든 큐는 인자로 받은 여러 설정을 적용한 큐를 생성합니다.
+
+  ```swift
+  let myQueue = DispatchQueue(label: "myQueue")
+  ```
+
+  위와 같이 label 만으로 만들게 되면, unspecified 의 우선순위를 가진 serial queue 를 생성합니다.
+
+  ```swift
+  let myQueue = DispatchQueue(label: "myQueue", qos: .userInitiated, attributes: .concurrent)
+  ```
+
+  우선순위와 serial, concurrent 구분을 직접 설정해줄 수도 있습니다.
+
+* 지금까지의 예시들을 봤을 때 두 방식에 별다른 차이가 없는데요. 그럼 왜 global() 을 사용하지 않고 생성자를 사용할까요?
+
+  첫 번째는 디버깅에서의 이점이 있습니다.
+
+  ```swift
+  func debugQueue(_ queue: DispatchQueue) {
+      for _ in 1...5 {
+          queue.async {
+              print("break point")
+          }
+      }
+      
+      for _ in 1...5 {
+          queue.async {
+              print("break point")
+          }
+      }
+  }
+  ```
+
+  디버깅 상황을 만들기 위해 큐를 인자로 받아 그 큐에서 간단한 동작을 하는 함수를 만들었습니다. 위에서 만든 myQueue 를 인자로 넘겨주고 print 가 실행되는 부분에 브레이크포인트를 설정해보겠습니다.
+
+  <img width="456" alt="스크린샷 2020-08-16 오전 12 44 22" src="https://user-images.githubusercontent.com/50410213/90315863-b598e100-df59-11ea-9c0a-433f4f912daf.png">
+
+  Xcode 의 Debug navigator 를 보면 브레이크포인트가 설정된 코드가 실행된 큐와 스레드, 그리고 해당 큐가 관리 중인 스레드들도 확인할 수 있습니다.
+
+  <img width="458" alt="스크린샷 2020-08-16 오전 1 16 24" src="https://user-images.githubusercontent.com/50410213/90316593-22ae7580-df5e-11ea-925c-889c446a2d58.png">
+
+  반면에 DispatchQueue.global() 을 넘겨주면 시스템에 구현되어있는 전역 큐를 사용하게 되어 디버깅이 어려워지게 됩니다.
+
+  두 번째는 [barrier](https://developer.apple.com/documentation/dispatch/dispatchworkitemflags/1780674-barrier) 와 같은 DispatchQueue 의 몇 가지 세부적인 설정을 사용하기 위함입니다. barrier 란 단어 뜻 그대로 동시성을 지원하는 비동기 큐에서 장벽 같은 역할을 해주는 기능인데요.
+
+  ![barrier](https://koenig-media.raywenderlich.com/uploads/2014/09/Dispatch-Barrier-Swift.png)
+
+  위 그림처럼 비동기 작업들이 실행되다가 flag 가 barrier 로 설정된 작업이 실행되면 그 작업이 끝날 때 까지 serial queue 처럼 동작하게 됩니다. 간단한 예시코드를 보겠습니다.
+
+  ```swift
+  let myQueue = DispatchQueue(label: "myQueue", attributes: .concurrent)
+  
+  for i in 1...5 {
+      myQueue.async {
+          print("\(i)")
+      }
+  }
+  
+  myQueue.async(flags: .barrier) {
+      print("barrier!!")
+      sleep(5)
+  }
+  
+  for i in 6...10 {
+      myQueue.async {
+          print("\(i)")
+      }
+  }
+  ```
+
+  숫자들을 비동기로 출력하는 코드 사이에 flags 를 barrier 로 설정한 코드를 추가해주었습니다.
+
+  ![barrier](https://user-images.githubusercontent.com/50410213/90316847-f98ee480-df5f-11ea-9de9-2bc991e8bf83.gif)
+
+  숫자들이 출력되다가 barrier 블록이 실행되자 다음 작업들이 barrier 블록이 끝날 때까지 기다리는 것을 확인할 수 있습니다. 만약 barrier 가 없다면 concurrent queue 에서 비동기로 숫자들을 출력하기 때문에 한번에 모든 숫자가 출력될 것입니다. [barrier](https://developer.apple.com/documentation/dispatch/1452917-dispatch_barrier_sync?language=occ) 공식문서를 보면 barrier 를 지정하는 큐는 직접 만든 concurrent queue 여야만 한다고 합니다. barrier 를 포함한 몇몇 세부적인 설정들은 글로벌 큐에서는 사용할 수 없습니다. 
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [Grand Central Dispatch Tutorial for Swift 4](https://www.raywenderlich.com/5370-grand-central-dispatch-tutorial-for-swift-4-part-1-2)
+* [DispatchQueue sync vs sync barrier in concurrent queue](https://stackoverflow.com/questions/58236153/dispatchqueue-sync-vs-sync-barrier-in-concurrent-queue)
+
+----
+
+### Q.
+
 > DispatchQueue 에서 main.sync 는 언제 사용하나요?
 
 DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에서 DispatchQueue.main 에서 sync 를 호출하지 말라고 합니다. 왜 호출하지 말라고 하는 것이며, 그럼 왜 GCD 에서 DispatchQueue.main.sync 가 구현되어있는 건가요?
