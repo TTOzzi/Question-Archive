@@ -29,6 +29,10 @@
 21. [왜 delegate 를 weak 으로 선언하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-5.md#q)
 22. [frame 과 bounds 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-5.md#q-1)
 23. [App Transport Security 가 HTTP 통신을 차단해요.](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-5.md#q-2)
+24. [DispatchQueue.global() 과 DispatchQueue.init() 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-6.md#q)
+25. [DispatchQueue 에서 main.sync 는 언제 사용하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-6.md#q-1)
+26. [특정한 여러 개의 비동기 작업이 완료된 후에 다른 작업을 실행해주고 싶어요.](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-6.md#q-2)
+27. [동시에 실행되는 비동기 작업의 개수를 제한할 수 있나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-6.md#q-3)
 
 #### 참고한 커뮤니티
 * [야곰닷넷](https://yagom.net/)
