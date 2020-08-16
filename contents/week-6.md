@@ -223,7 +223,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
   downloadGroup.wait()
   ```
 
-  [wait()](https://developer.apple.com/documentation/dispatch/dispatchgroup/2016090-wait) 을 활용해 wait() 을 호출한 큐에서 그룹의 작업이 완료될 때까지 동기적으로 기다리도록 할 수도 있습니다. 그러나 이 방법은 wait() 을 호출한 큐를 차단하므로 deadlock 이 발생할 수 있어 주의해야 합니다.
+  [wait()](https://developer.apple.com/documentation/dispatch/dispatchgroup/2016090-wait) 을 활용해 wait() 을 호출한 큐에서 그룹의 작업이 완료될 때까지 동기적으로 기다리도록 할 수도 있습니다. 그러나 이 방법은 wait() 을 호출한 큐를 차단하므로 deadlock 이 발생할 수 있어 주의해야 합니다. deadlock 발생을 피하려고 [wait(timeout:)](https://developer.apple.com/documentation/dispatch/dispatchgroup/1780590-wait) 으로 최대 대기 시간을 설정해주기도 합니다.
 
 * 비동기 작업관련 API 가 내부적으로 비동기로 구현되어 있어 async 블록에서 group 지정을 해줄 수 없는 경우 다음과 같이 [enter()](https://developer.apple.com/documentation/dispatch/dispatchgroup/1452803-enter), [leave()](https://developer.apple.com/documentation/dispatch/dispatchgroup/1452872-leave) 를 활용하는 방법도 있습니다.
 
@@ -253,3 +253,71 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
 * [Waiting until the task finishes](https://stackoverflow.com/questions/42484281/waiting-until-the-task-finishes)
 * [Waiting until two async blocks are executed before stating another block](https://stackoverflow.com/questions/11909629/waiting-until-two-async-blocks-are-executed-before-starting-another-block)
 * [Swift DispatchGroup notify before task finish](https://stackoverflow.com/questions/11909629/waiting-until-two-async-blocks-are-executed-before-starting-another-block)
+
+----
+
+### Q.
+
+> 동시에 실행되는 비동기 작업의 개수를 제한할 수 있나요?
+
+비동기적으로 데이터베이스에서 데이터를 수집하고 있습니다. 동시에 실행되는 작업의 개수를 제한할 수 있는 방법이 있나요?
+
+[질문 바로가기]()
+
+### A.
+
+* [OperationQueue](https://developer.apple.com/documentation/foundation/operationqueue) 의 [maxConcurrentOperationCount](https://developer.apple.com/documentation/foundation/operationqueue/1414982-maxconcurrentoperationcount) 나 [DispatchSemaphore](https://developer.apple.com/documentation/dispatch/dispatchsemaphore) 를 활용해 제한할 수 있습니다. 데이터를 수집하는데에 3초의 시간이 소모되며, 동시에 3개의 작업만 해야 한다고 가정하고 예시코드를 작성해 보겠습니다.
+
+* OperationQueue 를 활용한 방법
+
+  ```swift
+  func acquire(data: Int) {
+      print("데이터 \(data) 수집 시작!")
+      sleep(3)
+      print("데이터 \(data) 수집 완료!")
+  }
+  
+  let acquiringQueue = OperationQueue()
+  acquiringQueue.maxConcurrentOperationCount = 3
+  
+  for i in 1...10 {
+      acquiringQueue.addOperation {
+          acquire(data: i)
+      }
+  }
+  ```
+
+  데이터 수집 작업을 관리할 acquiringQueue 라는 OperationQueue 를 만들어 주었습니다. OperationQueue 의 maxConcurrentOperationCount 를 3으로 설정해 동시에 실행할 수 있는 작업의 수를 3개로 제한해주었습니다. 다음은 총 10개의 데이터를 수집하는 코드를 실행한 모습입니다.
+
+  ![operationqueue](https://user-images.githubusercontent.com/50410213/90326614-5c669700-dfc5-11ea-83bd-3bc7f5f62e18.gif)
+
+  작업을 3개씩 실행하는 것을 확인할 수 있습니다.
+
+* DispatchSemaphore 를 활용한 방법
+
+  ```swift
+  let acquiringQueue = DispatchQueue(label: "acquiringQueue", attributes: .concurrent)
+  let acquiringSemaphore = DispatchSemaphore(value: 3)
+  
+  DispatchQueue.global().async {
+      for i in 1...10 {
+          // count -= 1
+          acquiringSemaphore.wait()
+          acquiringQueue.async {
+              acquire(data: i)
+              // count += 1
+              acquiringSemaphore.signal()
+          }
+      }
+  }
+  ```
+
+  이번에는 DispatchQueue 의 생성자로 동시성을 지원하는 사용자 지정 큐와 DispatchSemaphore 를 생성해주었습니다. 세마포어를 만들 때 사용 가능한 리소스의 수를 지정해줍니다. 이 값은 세마포어가 제한할 작업의 개수가 됩니다. 비동기 호출 직전에 [wait()](https://developer.apple.com/documentation/dispatch/dispatchsemaphore/2016071-wait) 을 호출하여 세마포어의 값을 1 감소시킵니다. 세마포어의 값이 음수가 되면 함수는 커널에 스레드를 차단하도록 지시합니다. wait() 을 메인 스레드에서 호출하게 되면 메인 스레드를 차단하기 때문에 주의해야합니다. 비동기 작업이 완료된 후 [signal()](https://developer.apple.com/documentation/dispatch/dispatchsemaphore/1452919-signal) 을 호출하여 세마포어의 값을 1 증가시키면 차단된 스레드 중 하나가 차단 해제되고 남은 작업을 수행하게 됩니다.
+
+* 동시에 실행되는 작업의 개수를 제한하는 경우 외에도 일반적으로 DispatchSemaphore 는 공유 자원에 접근하는 스레드의 개수를 제한해야 할 때 유용하게 사용합니다.
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [When to use Semaphore instead of Dispatch Group?](https://stackoverflow.com/questions/49923810/when-to-use-semaphore-instead-of-dispatch-group)
+* [Does DispatchSemaphore wait for specific thread objects?](https://stackoverflow.com/questions/61309944/does-dispatchsemaphore-wait-for-specific-thread-objects)
+* [can I call on semaphore.wait() main thread?](https://stackoverflow.com/questions/50791315/can-i-call-on-semaphore-wait-main-thread)
