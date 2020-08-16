@@ -128,7 +128,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
   이 문제는 myQueue 를 생성할 때 
 
   ```swift
-  let myQueue = DispatchQueue(label: "com.ttozzi", attributes: .concurrent)
+  let myQueue = DispatchQueue(label: "label", attributes: .concurrent)
   ```
 
   와 같이 concurrent 속성을 설정하여 한번에 여러 작업을 실행할 수 있도록 해주어 해결할 수 있습니다.
@@ -159,3 +159,97 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
 
 -----
 
+### Q.
+
+> 특정한 여러 개의 비동기 작업이 완료된 후에 다른 작업을 실행해주고 싶어요.
+
+반복문을 사용하여 네트워크 요청을 여러 번 보내는데, 모든 요청이 완료된 후 다른 작업을 실행하는 방법이 있나요?
+
+[질문 바로가기](https://stackoverflow.com/questions/35906568/wait-until-swift-for-loop-with-asynchronous-network-requests-finishes-executing)
+
+### A.
+
+* [DispatchGroup](https://developer.apple.com/documentation/dispatch/dispatchgroup) 을 활용해 그룹에 연결된 작업들이 완료되었을 때 핸들러를 실행해줄 수 있습니다. 5개의 이미지를 다운받은 후 UI 를 업데이트해줘야 하는 상황을 예시로 들어보겠습니다.
+
+  ```swift
+  override func viewDidLoad() {
+      super.viewDidLoad()
+          
+      for _ in 1...5 {
+          DispatchQueue.global().async {
+              print("이미지 다운로드 요청!")
+              sleep(3)
+              print("이미지 다운로드 완료!")
+          }
+      }
+          
+      print("UI 업데이트!")
+  }
+  ```
+
+  이미지 데이터를 다운받는데 3초가 걸린다고 가정하고 작성한 예시코드입니다. 코드를 실행해보면
+
+  ![async](https://user-images.githubusercontent.com/50410213/90325097-6f23a080-dfb2-11ea-87b8-1ca882419fde.gif)
+
+  이미지 다운로드를 비동기로 요청하기 때문에 UI 업데이트와 이미지 다운로드 간의 순서를 보장하지 않는 것을 확인할 수 있습니다.
+
+  ```swift
+  override func viewDidLoad() {
+      super.viewDidLoad()
+      
+      let downloadGroup = DispatchGroup()
+      
+      for _ in 1...5 {
+          DispatchQueue.global().async(group: downloadGroup) {
+              print("이미지 다운로드 요청!")
+              sleep(3)
+              print("이미지 다운로드 완료!")
+          }
+      }
+      
+      downloadGroup.notify(queue: .main) {
+          print("UI 업데이트!")
+      }
+  }
+  ```
+
+  downloadGroup 이라는 DispatchGroup 을 만들어 다운로드 요청 작업들을 downloadGroup 에 연결해주고 downloadGroup 의 작업이 끝나면 main 큐에서 UI 업데이트를 하도록 해주었습니다.
+
+  ![dispatchGroup](https://user-images.githubusercontent.com/50410213/90325212-ba8a7e80-dfb3-11ea-8654-07a9dafd7d81.gif)
+
+  이미지 다운로드가 모두 완료된 후 UI 업데이트가 출력되는 것을 확인할 수 있습니다.
+
+  ```swift
+  downloadGroup.wait()
+  ```
+
+  [wait()](https://developer.apple.com/documentation/dispatch/dispatchgroup/2016090-wait) 을 활용해 wait() 을 호출한 큐에서 그룹의 작업이 완료될 때까지 동기적으로 기다리도록 할 수도 있습니다. 그러나 이 방법은 wait() 을 호출한 큐를 차단하므로 deadlock 이 발생할 수 있어 주의해야 합니다.
+
+* 비동기 작업관련 API 가 내부적으로 비동기로 구현되어 있어 async 블록에서 group 지정을 해줄 수 없는 경우 다음과 같이 [enter()](https://developer.apple.com/documentation/dispatch/dispatchgroup/1452803-enter), [leave()](https://developer.apple.com/documentation/dispatch/dispatchgroup/1452872-leave) 를 활용하는 방법도 있습니다.
+
+  ```swift
+  override func viewDidLoad() {
+      super.viewDidLoad()
+      
+      let downloadGroup = DispatchGroup()
+      
+      for _ in 1...5 {
+          guard let imageURL = URL(string: "https://example.com") else { return }
+          downloadGroup.enter()
+          URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
+              // 이미지 다운로드 요청 완료 후 동작
+              downloadGroup.leave()
+          }.resume()
+      }
+      
+      downloadGroup.notify(queue: .main) {
+          print("UI 업데이트!")
+      }
+  }
+  ```
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [Waiting until the task finishes](https://stackoverflow.com/questions/42484281/waiting-until-the-task-finishes)
+* [Waiting until two async blocks are executed before stating another block](https://stackoverflow.com/questions/11909629/waiting-until-two-async-blocks-are-executed-before-starting-another-block)
+* [Swift DispatchGroup notify before task finish](https://stackoverflow.com/questions/11909629/waiting-until-two-async-blocks-are-executed-before-starting-another-block)
