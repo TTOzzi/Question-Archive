@@ -6,7 +6,7 @@
 
 백그라운드 스레드를 관리하는 큐를 생성하고 싶은데요. [DispatchQueue.global()](https://developer.apple.com/documentation/dispatch/dispatchqueue/2300077-global) 으로 생성하는 방법과 [DispatchQueue.init()](https://developer.apple.com/documentation/dispatch/dispatchqueue/2300059-init) 으로 label 을 설정하여 생성하는 방법에는 어떤 차이가 있나요?
 
-[질문 바로가기](https://stackoverflow.com/questions/53489764/understanding-dispatch-queue-threading/53489813#53489813)
+[질문 바로가기](https://stackoverflow.com/questions/53489764/understanding-dispatch-queue-threading/53489813)
 
 ### A.
 
@@ -85,7 +85,7 @@
 
   숫자들을 비동기로 출력하는 코드 사이에 flags 를 barrier 로 설정한 코드를 추가해주었습니다.
 
-  ![barrier](https://user-images.githubusercontent.com/50410213/90316847-f98ee480-df5f-11ea-9de9-2bc991e8bf83.gif)
+  <img height="500" src="https://user-images.githubusercontent.com/50410213/90316847-f98ee480-df5f-11ea-9de9-2bc991e8bf83.gif"/>
 
   숫자들이 출력되다가 barrier 블록이 실행되자 다음 작업들이 barrier 블록이 끝날 때까지 기다리는 것을 확인할 수 있습니다. 만약 barrier 가 없다면 concurrent queue 에서 비동기로 숫자들을 출력하기 때문에 한번에 모든 숫자가 출력될 것입니다. [barrier](https://developer.apple.com/documentation/dispatch/1452917-dispatch_barrier_sync?language=occ) 공식문서를 보면 barrier 를 지정하는 큐는 직접 만든 concurrent queue 여야만 한다고 합니다. barrier 를 포함한 몇몇 세부적인 설정들은 글로벌 큐에서는 사용할 수 없습니다. 
 
@@ -135,7 +135,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
 
 * 다시 본론으로 돌아오면, DispatchQueue.main 은 프로그램의 메인 스레드에서 작업을 실행하는 전역적으로 사용이 가능한 **serial queue** 입니다. 앱의 run loop 와 함께 작동하며, 대기 중인 동작을 run loop 의 다른 이벤트 처리와 조율해줍니다. 이러한 DispatchQueue.main 에서 sync 를 호출하게 된다면 끊임없이 앱의 이벤트 처리를 하고 있던 메인 스레드가 sync 호출에 의해 멈추게 되고 위에서 예시로 들었던 코드와 같이 deadlock 이 발생하게 됩니다.
 
-* 그럼 DispatchQueue.main 은 어떤 경우에 사용할까요? 백그라운드 스레드에서 이루어지는 작업들 사이에 순서에 맞게 메인 스레드에서 어떠한 작업이 이루어져야 할 때 사용합니다. 다음 코드를 보겠습니다.
+* 그럼 DispatchQueue.main.sync 는 어떤 경우에 사용할까요? 백그라운드 스레드에서 이루어지는 작업들 사이에 순서에 맞게 메인 스레드에서 어떠한 작업이 이루어져야 할 때 사용합니다. 다음 코드를 보겠습니다.
 
   ```swift
   DispatchQueue.global().async {
@@ -189,7 +189,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
 
   이미지 데이터를 다운받는데 3초가 걸린다고 가정하고 작성한 예시코드입니다. 코드를 실행해보면
 
-  ![async](https://user-images.githubusercontent.com/50410213/90325097-6f23a080-dfb2-11ea-87b8-1ca882419fde.gif)
+  <img height="500" src="https://user-images.githubusercontent.com/50410213/90325097-6f23a080-dfb2-11ea-87b8-1ca882419fde.gif"/>
 
   이미지 다운로드를 비동기로 요청하기 때문에 UI 업데이트와 이미지 다운로드 간의 순서를 보장하지 않는 것을 확인할 수 있습니다.
 
@@ -215,7 +215,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
 
   downloadGroup 이라는 DispatchGroup 을 만들어 다운로드 요청 작업들을 downloadGroup 에 연결해주고 downloadGroup 의 작업이 끝나면 main 큐에서 UI 업데이트를 하도록 해주었습니다.
 
-  ![dispatchGroup](https://user-images.githubusercontent.com/50410213/90325212-ba8a7e80-dfb3-11ea-8654-07a9dafd7d81.gif)
+  <img height="500" src="https://user-images.githubusercontent.com/50410213/90325212-ba8a7e80-dfb3-11ea-8654-07a9dafd7d81.gif"/>
 
   이미지 다운로드가 모두 완료된 후 UI 업데이트가 출력되는 것을 확인할 수 있습니다.
 
@@ -260,7 +260,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
 
 > 동시에 실행되는 비동기 작업의 개수를 제한할 수 있나요?
 
-비동기적으로 데이터베이스에서 데이터를 수집하고 있습니다. 동시에 실행되는 작업의 개수를 제한할 수 있는 방법이 있나요?
+비동기적으로 데이터베이스에서 데이터를 수집하고 있습니다. 동시에 실행되는 작업의 개수를 제한할 방법이 있나요?
 
 [질문 바로가기]()
 
@@ -289,7 +289,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
 
   데이터 수집 작업을 관리할 acquiringQueue 라는 OperationQueue 를 만들어 주었습니다. OperationQueue 의 maxConcurrentOperationCount 를 3으로 설정해 동시에 실행할 수 있는 작업의 수를 3개로 제한해주었습니다. 다음은 총 10개의 데이터를 수집하는 코드를 실행한 모습입니다.
 
-  ![operationqueue](https://user-images.githubusercontent.com/50410213/90326614-5c669700-dfc5-11ea-83bd-3bc7f5f62e18.gif)
+  <img height="500" src="https://user-images.githubusercontent.com/50410213/90326614-5c669700-dfc5-11ea-83bd-3bc7f5f62e18.gif"/>
 
   작업을 3개씩 실행하는 것을 확인할 수 있습니다.
 
@@ -312,7 +312,7 @@ DispatchQueue 에 대해 공부하면서 생긴 의문인데, 많은 자료에�
   }
   ```
 
-  이번에는 DispatchQueue 의 생성자로 동시성을 지원하는 사용자 지정 큐와 DispatchSemaphore 를 생성해주었습니다. 세마포어를 만들 때 사용 가능한 리소스의 수를 지정해줍니다. 이 값은 세마포어가 제한할 작업의 개수가 됩니다. 비동기 호출 직전에 [wait()](https://developer.apple.com/documentation/dispatch/dispatchsemaphore/2016071-wait) 을 호출하여 세마포어의 값을 1 감소시킵니다. 세마포어의 값이 음수가 되면 함수는 커널에 스레드를 차단하도록 지시합니다. wait() 을 메인 스레드에서 호출하게 되면 메인 스레드를 차단하기 때문에 주의해야합니다. 비동기 작업이 완료된 후 [signal()](https://developer.apple.com/documentation/dispatch/dispatchsemaphore/1452919-signal) 을 호출하여 세마포어의 값을 1 증가시키면 차단된 스레드 중 하나가 차단 해제되고 남은 작업을 수행하게 됩니다.
+  이번에는 DispatchQueue 의 생성자로 동시성을 지원하는 사용자 지정 큐와 DispatchSemaphore 를 생성해주었습니다. 세마포어를 만들 때 사용 가능한 리소스의 수를 지정해줍니다. 이 값은 세마포어가 제한할 작업의 개수가 됩니다. 비동기 호출 직전에 [wait()](https://developer.apple.com/documentation/dispatch/dispatchsemaphore/2016071-wait) 을 호출하여 세마포어의 값을 1 감소시킵니다. 세마포어의 값이 음수가 되면 함수는 커널에 스레드를 차단하도록 지시합니다. wait() 을 메인 스레드에서 호출하게 되면 메인 스레드를 차단하기 때문에 주의해야합니다. 비동기 작업이 완료된 후 [signal()](https://developer.apple.com/documentation/dispatch/dispatchsemaphore/1452919-signal) 을 호출하여 세마포어의 값을 1 증가시키면 차단된 스레드 중 하나가 차단 해제되고 남은 작업을 수행하게 됩니다. 실행 결과는 OperationQueue 를 활용한 방법과 같습니다.
 
 * 동시에 실행되는 작업의 개수를 제한하는 경우 외에도 일반적으로 DispatchSemaphore 는 공유 자원에 접근하는 스레드의 개수를 제한해야 할 때 유용하게 사용합니다.
 
