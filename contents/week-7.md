@@ -78,3 +78,96 @@
 
 -----
 
+### Q.
+
+> mutating 이 무엇인가요?
+
+메소드 앞의 mutating 키워드의 의미가 무엇인가요?
+
+[질문 바로가기](https://stackoverflow.com/questions/51128666/what-does-the-swift-mutating-keyword-mean)
+
+### A.
+
+* 기본적으로 값 타입인 구조체와 열거형의 프로퍼티는 인스턴스 메소드 내에서 수정할 수 없습니다. 하지만 특정한 메소드 내에서 프로퍼티의 값을 변경해야 할 때가 있다면 메소드 앞에 mutating 키워드를 붙여 내부 프로퍼티를 수정하는 메소드를 만들 수 있습니다.
+
+  ```swift
+  struct Point {
+      var x = 0.0
+      var y = 0.0
+    
+      func moveBy(x deltaX: Double, y deltaY: Double) {
+          // 'self' is immutable 에러 발생
+          x += deltaX
+          y += deltaY
+      }
+  }
+  ```
+
+  x, y 좌표를 가지는 Point 구조체를 만들어 주었습니다. moveBy(x:y:) 메소드에서 Point 구조체 내부의 x, y 프로퍼티의 값을 수정하게 되면 에러가 발생합니다.
+
+  ```swift
+  struct Point {
+      var x = 0.0
+      var y = 0.0
+      
+      mutating func moveBy(x deltaX: Double, y deltaY: Double) {
+          x += deltaX
+          y += deltaY
+      }
+  }
+  ```
+
+  이럴 때, mutating 키워드를 메소드 앞에 붙여 메소드가 구조체의 값을 변경할 것임을 명시해야 합니다. 
+
+  ```swift
+  struct Point {
+      var x = 0.0
+      var y = 0.0
+      
+      mutating func moveBy(x deltaX: Double, y deltaY: Double) {
+          self = Point(x: x + deltaX, y: y + deltaY)
+      }
+  }
+  ```
+
+  self 에 새로운 인스턴스를 만들어 할당할 수도 있습니다. mutating 메소드로 내부 프로퍼티의 값을 변경하면 프로퍼티만 변경되는 것이 아니라, **프로퍼티가 변경된 완전히 새로운 인스턴스를 만들어 기존 인스턴스를 대체**하므로 각각의 프로퍼티를 수정하는 것과 self 에 새로운 인스턴스를 만들어 할당하는 것은 완벽하게 똑같이 작동합니다.
+
+  ```swift
+  let somePoint = Point()
+  // Cannot use mutating member on immutable value 에러 발생
+  somePoint.moveBy(x: 1, y: 2)
+  ```
+
+  같은 맥락으로 mutating 메소드를 호출한다는 것은 기존의 인스턴스를 새로운 인스턴스로 대체한다는 것을 의미하므로 구조체가 상수로 선언되어 있다면 mutating 메소드를 호출할 수 없습니다.
+
+* 구조체와 같이 열거형도 똑같이 동작하며 다음과 같이 활용할 수 있습니다.
+
+  ```swift
+  enum TriStateSwitch {
+      case off, low, high
+      
+      mutating func next() {
+          switch self {
+          case .off:
+              self = .low
+          case .low:
+              self = .high
+          case .high:
+              self = .off
+          }
+      }
+  }
+  
+  var ovenLight = TriStateSwitch.low
+  ovenLight.next() // high
+  ovenLight.next() // off
+  ```
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [Swift and mutating struct](https://stackoverflow.com/questions/24035648/swift-and-mutating-struct)
+* [Mutating function inside class](https://stackoverflow.com/questions/38422781/mutating-function-inside-class)
+* [Swift: Methods](https://docs.swift.org/swift-book/LanguageGuide/Methods.html)
+
+-----
+
