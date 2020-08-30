@@ -171,3 +171,72 @@
 
 -----
 
+### Q.
+
+> lazy 가 무엇인가요?
+
+Swift 에서 lazy 키워드의 의미가 무엇인가요?
+
+[질문 바로가기](https://stackoverflow.com/questions/44153817/what-is-lazy-meaning-in-swift)
+
+### A.
+
+* lazy 키워드로 변수를 선언하여 해당 변수가 처음 요청될 때 계산되는 변수를 만들 수 있습니다.
+
+  ```swift
+  class Properties {
+      var property: Int = Properties.someExpensiveFunction("property")
+      lazy var lazyProperty: Int = Properties.someExpensiveFunction("lazyProperty")
+      
+      static func someExpensiveFunction(_ name: String) -> Int {
+          // 복잡한 로직...
+          print("calculating \(name)...")
+          return 0
+      }
+  }
+  ```
+
+  복잡한 계산 로직을 갖고, 많은 리소스를 소모하는 메소드 someExpensiveFunction 의 반환 값을 프로퍼티로 가지는 Properties 클래스입니다.
+
+  ```swift
+  let properties = Properties()
+  ```
+
+  <img width="272" alt="스크린샷 2020-08-31 오전 12 41 55" src="https://user-images.githubusercontent.com/50410213/91663273-d1d47a80-eb22-11ea-8b7b-c8f0d3de602b.png">
+
+  생성자로 인스턴스를 생성하면, property 만 생성되는 것을 확인할 수 있습니다.
+
+  ```swift
+  let properties = Properties()
+  print(properties.lazyProperty)
+  ```
+
+  <img width="311" alt="스크린샷 2020-08-31 오전 12 43 36" src="https://user-images.githubusercontent.com/50410213/91663313-02b4af80-eb23-11ea-9fb4-336c2303ff9e.png">
+
+  lazy 로 선언한 프로퍼티는 프로퍼티에 접근할 때 생성됩니다. 이처럼 프로퍼티의 초깃값을 계산하는 데에 많은 리소스를 소모하는 경우, 인스턴스를 생성할 때 계산하지 않고 프로퍼티가 필요할 때 계산을 수행하도록 구현하기 위해 사용합니다.
+
+* 추가로 인스턴스의 초기화가 완료될 때까지 값을 알 수 없는 외부 요인에 따라 프로퍼티의 초깃값이 달라질 때도 유용하게 사용합니다.
+
+* lazy 프로퍼티는 처음 접근할 때만 계산되고, 그 후엔 값을 저장합니다. 하지만 프로퍼티가 초기화되지 않은 상태에서 여러 스레드에서 동시에 프로퍼티에 접근하는 경우, 프로퍼티를 초기화하기 위한 계산이 여러 번 이루어질 수 있습니다.
+
+  ```swift
+  let properties = Properties()
+  for _ in 1...10 {
+      DispatchQueue.global().async {
+          print(properties.lazyProperty)
+      }
+  }
+  ```
+
+  여러 개의 백그라운드 스레드에서 동시에 lazyProperty 에 접근하는 코드입니다.
+
+  <img width="326" alt="스크린샷 2020-08-31 오전 1 02 33" src="https://user-images.githubusercontent.com/50410213/91663730-aa32e180-eb25-11ea-821d-f46b884f7061.png">
+
+  lazyProperty 의 초기화가 여러번 이루어진 것을 확인할 수 있습니다. 이런 경우, 중간에 값의 변경이 이루어져 예상치 못한 결과를 초래할 수 있으므로 주의해야 합니다.
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [Swift: Properties](https://docs.swift.org/swift-book/LanguageGuide/Properties.html#)
+* [Lazy property's memory management](https://stackoverflow.com/questions/41478975/lazy-property-s-memory-management)
+* [What are lazy variables?](https://www.hackingwithswift.com/example-code/language/what-are-lazy-variables)
+
