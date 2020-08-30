@@ -234,9 +234,38 @@ Swift 에서 lazy 키워드의 의미가 무엇인가요?
 
   lazyProperty 의 초기화가 여러번 이루어진 것을 확인할 수 있습니다. 이런 경우, 중간에 값의 변경이 이루어져 예상치 못한 결과를 초래할 수 있으므로 주의해야 합니다.
 
+* lazy 프로퍼티와 비슷하게 동작하는 [LazySequence](https://developer.apple.com/documentation/swift/lazysequence#overview) 도 존재합니다. 배열, 문자열 등 [Sequence](https://developer.apple.com/documentation/swift/sequence) 프로토콜을 채택한 타입이라면 기본적으로 [lazy](https://developer.apple.com/documentation/swift/sequence/1641562-lazy) 에 구현되어 있습니다. LazySequence 는 map, filter 와 같은 고차함수를 사용했을 때, 시퀀스 전체를 계산하지 않고, 접근한 인덱스의 값을 가져오는 데 필요한 계산만 수행합니다.
+
+  ```swift
+  func double(_ number: Int) -> Int {
+      print("calculating \(number)...")
+      return number * 2
+  }
+  ```
+
+  인자로 받은 정수에 2를 곱해 반환하는 메소드입니다.
+
+  ```swift
+  let doubled = [1, 2, 3].map { double($0) }
+  ```
+
+  <img width="192" alt="스크린샷 2020-08-31 오전 1 34 22" src="https://user-images.githubusercontent.com/50410213/91664422-2d563680-eb2a-11ea-8448-e23bf8f46eb3.png">
+
+  일반적인 배열에 map 을 사용하면 계산된 배열을 doubled 에 저장할 때 배열의 모든 값을 계산합니다.
+
+  ```swift
+  let lazyDoubled = [1, 2, 3].lazy.map { double($0) }
+  print(lazyDoubled[1])
+  ```
+
+  <img width="196" alt="스크린샷 2020-08-31 오전 1 38 12" src="https://user-images.githubusercontent.com/50410213/91664505-a2c20700-eb2a-11ea-810e-02e5541f5bdc.png">
+
+  배열에 구현되어있는 LazySequence 에 map 을 사용하였습니다. 접근한 값을 가져오는 데 필요한 계산만 수행하는 것을 확인할 수 있습니다. LazySequence 는 lazy 프로퍼티와는 달리 값을 저장하지 않고 매번 계산합니다. 이를 인지하고, 상황에 맞게 적절하게 사용하면 불필요한 계산을 피하고 성능을 향상시킬수 있을 것입니다. 좀 더 자세한 정보와 활용법은 [LazySequence.swift](https://github.com/apple/swift/blob/master/stdlib/public/core/LazySequence.swift) 를 참고하세요.
+
 ### 참고할 만한 비슷한 질문, 자료
 
 * [Swift: Properties](https://docs.swift.org/swift-book/LanguageGuide/Properties.html#)
 * [Lazy property's memory management](https://stackoverflow.com/questions/41478975/lazy-property-s-memory-management)
 * [What are lazy variables?](https://www.hackingwithswift.com/example-code/language/what-are-lazy-variables)
+* [Why and when to use lazy with Array in Swift?](https://stackoverflow.com/questions/51917054/why-and-when-to-use-lazy-with-array-in-swift)
 
