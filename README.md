@@ -36,6 +36,9 @@
 28. [== 와 === 의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-7.md#q)
 29. [mutating 이 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-7.md#q-1)
 30. [lazy 가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-7.md#q-2)
+31. [UIWindow 가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-8.md#q)
+32. [ScrollView 에서 contentOffset 과 contentInset 이 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-8.md#q-1)
+33. [오토레이아웃을 설정할 때의 margin 이 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-8.md#q-2)
 
 #### 참고한 커뮤니티
 * [야곰닷넷](https://yagom.net/)
