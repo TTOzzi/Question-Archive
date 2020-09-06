@@ -71,3 +71,36 @@ iOS 앱에서 UIWindow 가 무엇인가요??
 
 -----
 
+### Q.
+
+> ScrollView 에서 contentOffset 과 contentInset 이 무엇인가요?
+
+ScrollView 에서 contentOffset 과 contentInset 이 무엇인가요?
+
+[질문 바로가기](https://stackoverflow.com/questions/33286574/what-exactly-are-contentoffset-contentinset-of-scrollview)
+
+### A.
+
+* [contentOffset](https://developer.apple.com/documentation/uikit/uiscrollview/1619404-contentoffset) 은 전체 콘텐츠 뷰 영역을 기준으로 현재 화면에 보이는 스크롤 뷰 영역의 위치 좌표를 나타낸 값입니다.
+
+  <img width="65%" src="https://i.stack.imgur.com/S8ZxB.jpg"/><img width="35%" src="https://user-images.githubusercontent.com/50410213/92323759-5a4ca100-f076-11ea-989d-5f92651f5275.gif"/>
+
+  왼쪽 그림에서 파란 테두리가 스크롤 뷰의 영역, 검정 점선 테두리가 스크롤뷰의 콘텐츠 영역입니다. 사용자가 스크롤을 하면 화면에 보이는 콘텐츠의 영역이 변경되므로 contentOffset 의 값도 변경됩니다. contentOffset 의 값을 코드로 변경하면(슬라이더) 스크롤 뷰가 스크롤 되는 것과 같은 동작을 합니다.
+
+* [contentInset](https://developer.apple.com/documentation/uikit/uiscrollview/1619406-contentinset) 은 스크롤 뷰 가장자리와 콘텐츠 영역의 가장자리 사이에 스크롤 가능한 공간(패딩)을 추가합니다.
+
+  <img width="65%" src="https://developer.apple.com/library/archive/documentation/WindowsViews/Conceptual/UIScrollView_pg/Art/contentSize_contentInset.jpg"/><img width="35%" src="https://user-images.githubusercontent.com/50410213/92323638-46546f80-f075-11ea-8e6c-c2e49089c746.gif"/>
+
+  상단과 하단의 inset 값을 조절한 만큼 콘텐츠가 더 스크롤 되는 것(하늘색 영역)을 확인할 수 있습니다.
+
+* 만약 글만으로는 잘 이해가 되지 않는다면, contentInset 과 contentOffset 값의 변화에 따른 UIScrollView 의 변화를 한눈에 보기 쉽게 만든 [샘플 앱](https://github.com/TTOzzi/InsetVsOffset)이 있으니 참고하세요!
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [Scroll View Programming Guide for iOS](https://developer.apple.com/library/archive/documentation/WindowsViews/Conceptual/UIScrollView_pg/CreatingBasicScrollViews/CreatingBasicScrollViews.html)
+* [What does contentOffset do in a UIScrollView?](https://stackoverflow.com/questions/3339798/what-does-contentoffset-do-in-a-uiscrollview)
+* [What exactly are contentOffset, ContentInset and ContentSize of a UIScrollView?](https://levelup.gitconnected.com/what-exactly-are-contentoffset-contentinset-and-contentsize-of-a-uiscrollview-960207c75b88)
+* [Understanding the contentOffset and contentInset properties of the UIScrollView class](https://fizzbuzzer.com/understanding-the-contentoffset-and-contentinset-properties-of-the-uiscrollview-class/)
+
+-----
+
