@@ -104,3 +104,60 @@ ScrollView 에서 contentOffset 과 contentInset 이 무엇인가요?
 
 -----
 
+### Q.
+
+> 오토레이아웃을 설정할 때의 margin 이 무엇인가요?
+
+스토리보드에서 오토레이아웃을 설정할 때 `Constrain to margins` 라는 옵션이 있는데 이것의 의미가 무엇인가요?
+
+[질문 바로가기](https://stackoverflow.com/questions/25807545/what-is-constrain-to-margin-in-storyboard-in-xcode-6)
+
+### A.
+
+* [layoutMargins](https://developer.apple.com/documentation/uikit/uiview/1622566-layoutmargins) 란 뷰에 내용을 배치할 때 사용할 기본 간격입니다.
+
+* 기본적으로 UIView 는 top, bottom, right, left, 네 가장자리에 8 포인트의 여백을 가집니다. 인터페이스 빌더의 `Editor` -> `Canvas` -> `Layout Rectangels` 를 활성화해주면 뷰들에 기본 margin 이 설정되어 있는 것을 볼 수 있습니다.
+
+  <img width="60%" alt="스크린샷 2020-09-06 오후 10 25 58" src="https://user-images.githubusercontent.com/50410213/92326843-0bac0080-f090-11ea-95a8-d1286257a96d.png"><img width="30%" alt="스크린샷 2020-09-06 오후 10 44 25" src="https://user-images.githubusercontent.com/50410213/92327128-85dd8480-f092-11ea-832c-3aae4ca18ef6.png">
+
+* UIView 를 상속받는 모든 뷰들은 각기 다른 기본 여백을 가지고 있습니다. 이 여백은 오토레이아웃 제약조건을 설정할 때 `Constrain to margins` 옵션을 체크해주거나, margin 에 직접 제약조건을 설정할 때에만 배치에 영향을 줍니다.
+
+  <img width="30%" alt="스크린샷 2020-09-06 오후 10 46 26" src="https://user-images.githubusercontent.com/50410213/92327203-f4224700-f092-11ea-9b1e-9c385ba3867c.png"><img width="30%" alt="스크린샷 2020-09-06 오후 10 47 09" src="https://user-images.githubusercontent.com/50410213/92327200-f08ec000-f092-11ea-92fb-f72073f2152b.png"><img width="40%" alt="스크린샷 2020-09-06 오후 10 46 38" src="https://user-images.githubusercontent.com/50410213/92327201-f389b080-f092-11ea-8540-ef2e47c47b06.png">
+
+  뷰 내부의 라벨을 뷰의 좌측 상단에 붙이는 레이아웃을 `Constrain to margins` 옵션을 체크하고 설정한 모습입니다. top, leading 의 간격을 0씩 설정했음에도 불구하고 UIView 의 기본 margin 값인 8씩 띄워져 있는 것을 확인할 수 있습니다.
+
+  <img width="30%" alt="스크린샷 2020-09-06 오후 10 52 04" src="https://user-images.githubusercontent.com/50410213/92327314-b1ad3a00-f093-11ea-94b8-73eab96987b3.png"><img width="30%" alt="스크린샷 2020-09-06 오후 10 52 17" src="https://user-images.githubusercontent.com/50410213/92327312-b07c0d00-f093-11ea-8119-85e45db44538.png"><img width="40%" alt="스크린샷 2020-09-06 오후 10 52 31" src="https://user-images.githubusercontent.com/50410213/92327310-ae19b300-f093-11ea-895e-806988740e52.png">
+
+  같은 제약조건을 `Constrain to margins` 옵션을 체크하지 않고 설정한 모습입니다. UIView 의 margin 에 영향을 받지 않고 top, leading 의 간격이 0씩 설정된 것을 확인할 수 있습니다.
+
+* 뷰의 `layoutMargins` 프로퍼티나, 스토리보드에서 `Size inspector` 의 `Layout Margins` 옵션에서 뷰의 margin 값을 수정할 수 있습니다.
+
+  <img width="55%" alt="스크린샷 2020-09-06 오후 10 58 53" src="https://user-images.githubusercontent.com/50410213/92327407-8c6cfb80-f094-11ea-8d12-a426f064d6a2.png"><img width="45%" alt="스크린샷 2020-09-06 오후 10 59 16" src="https://user-images.githubusercontent.com/50410213/92327413-9858bd80-f094-11ea-810d-2c7a92496330.png">
+
+  `Size inspector` 에서 상위 뷰의 `Layout Margins` 옵션을 `Default` 에서 `Fixed` 로 바꿔주고, Left 와 Top 만 30으로 설정해 준 모습입니다. 설정해 준 값 대로 margin 이 바뀐것을 확인할 수 있습니다.
+
+  iOS 11 부터는 [directionalLayoutMargins](https://developer.apple.com/documentation/uikit/uiview/2865930-directionallayoutmargins) 를 지원하여 left, right 같은 고정된 방향이 아닌 leading, trailing 으로도 margin 값을 설정해줄 수 있습니다. `Size inspector` 에서도 `Language Directional` 옵션으로 설정할 수 있습니다.
+
+* [preservesSuperviewLayoutMargins](https://developer.apple.com/documentation/uikit/uiview/1622653-preservessuperviewlayoutmargins) 라는 옵션도 있는데, 이 옵션을 활성화하면 옵션을 활성화한 뷰가 자신의 콘텐츠를 배치할 때 자신의 부모 뷰의 margin 까지 계산하여 배치하게 됩니다. 간단한 예시로 살펴보겠습니다.
+
+  <img width="60%" alt="스크린샷 2020-09-06 오후 11 08 48" src="https://user-images.githubusercontent.com/50410213/92327669-41ec7e80-f096-11ea-9ac5-0722eea27281.png">
+
+  top 30, left 30, bottom 8, right 8 의 여백을 가지는 주황색 뷰와 기본값 8의 여백을 가지는 노란색 뷰입니다. 분홍색 점선이 주황색 뷰의 `layoutMargin` 이고 빨간색 점선이 노란색 뷰의 `layoutMargin` 입니다.
+
+  노란색 뷰에 라벨을 추가한 뒤,  `Constrain to margins` 옵션을 체크하고 top, left 를 0씩 설정해보겠습니다.
+
+  <img width="60%" alt="스크린샷 2020-09-06 오후 11 17 16" src="https://user-images.githubusercontent.com/50410213/92327779-1b7b1300-f097-11ea-9e14-152cc4a3c318.png">
+
+  라벨이 노란색 뷰의 margin 에 맞춰서 배치된 것을 확인할 수 있습니다.
+
+  여기서 노란색 뷰의 `preservesSuperviewLayoutMargins` 옵션을 활성화하면,
+
+  <img width="60%" src="https://user-images.githubusercontent.com/50410213/92327873-b542c000-f097-11ea-876e-ef3ac2ee103b.gif"/>
+
+  노란색 뷰의 margin 이 부모 뷰인 주황색 뷰의 margin 에 영향을 받아 변경되는 것을 확인할 수 있습니다.
+
+* `LayoutMargin` 을 정확하게 이해하고 사용한다면, 라벨이나 버튼에 패딩을 만들어 주고 싶을 때나 스택뷰에서 각각 다른 간격을 설정해주고 싶을 때 등 여러 방면에서 유용하게 사용할 수 있습니다. 좀 더 구체적인 설명과 활용 사례가 있는 발표자료와 영상이 있으니 [알아두면 유용한 iOS의 LayoutMargins를 소개합니다!](https://academy.realm.io/kr/posts/ios-layoutmargins/) 도 꼭 참고해보세요!
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [Positioning Content Within Layout Margins](https://developer.apple.com/documentation/uikit/uiview/positioning_content_within_layout_margins)
