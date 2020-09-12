@@ -10,7 +10,7 @@
 
 ### A.
 
-* @objc 는 Swift 로 작성된 코드에서 Objective-C 의 API 와의 호환을 위해 사용합니다. target-action 패턴(Selector)을 활용하는 [Timer](https://developer.apple.com/documentation/foundation/timer), [NotificationCenter](https://developer.apple.com/documentation/foundation/notificationcenter) 나, keyPath 를 활용하는 KVO, KVC 와 같은 Objc 기반 API 는 Objc 런타임을 통해 제공됩니다. Swift 4 이전엔 컴파일러가 Objc 런타임에 노출할 프로퍼티와 메소드를 자동으로 추론해줬지만, 추론하는 시기의 불분명함, 같은 이름(오버로딩)으로 인한 의도치 않은 충돌, 바이너리 크기 증가와 성능 저하 등의 이유([SE-0160: Limiting @objc inferece](https://github.com/apple/swift-evolution/blob/master/proposals/0160-objc-inference.md))로 Swift 4 부터는 @objc 를 명시하여 Objc 런타임에 노출할 프로퍼티와 메소드를 컴파일러에게 알려줘야 합니다.
+* @objc 는 Swift 로 작성된 코드에서 Objective-C 의 API 와의 호환을 위해 사용합니다. target-action 패턴(Selector)을 활용하는 [Timer](https://developer.apple.com/documentation/foundation/timer), [NotificationCenter](https://developer.apple.com/documentation/foundation/notificationcenter) 나, keyPath 를 활용하는 [KVO](https://developer.apple.com/documentation/swift/cocoa_design_patterns/using_key-value_observing_in_swift), [KVC](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/KeyValueCoding/index.html) 와 같은 Objc 기반 API 는 Objc 런타임을 통해 제공됩니다. Swift 4 이전엔 컴파일러가 Objc 런타임에 노출할 프로퍼티와 메소드를 자동으로 추론해줬지만, 추론하는 시기의 불분명함, 같은 이름(오버로딩)으로 인한 의도치 않은 충돌, 바이너리 크기 증가와 성능 저하 등의 이유([SE-0160: Limiting @objc inferece](https://github.com/apple/swift-evolution/blob/master/proposals/0160-objc-inference.md))로 Swift 4 부터는 @objc 를 명시하여 Objc 런타임에 노출할 프로퍼티와 메소드를 컴파일러에게 알려줘야 합니다.
 
 * target-action 패턴의 #selector
 
