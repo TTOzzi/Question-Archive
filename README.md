@@ -39,6 +39,9 @@
 31. [UIWindow 가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-8.md#q)
 32. [ScrollView 에서 contentOffset 과 contentInset 이 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-8.md#q-1)
 33. [오토레이아웃을 설정할 때의 margin 이 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-8.md#q-2)
+34. [@objc 의 의미가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-9.md#q)
+35. [자기 자신의 프로퍼티나 메소드에 접근할 때 항상 self 를 붙여줘야 하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-9.md#q-1)
+36. [코드로 오토레이아웃을 설정하고 싶어요.](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-9.md#q-2)
 
 #### 참고한 커뮤니티
 * [야곰닷넷](https://yagom.net/)
