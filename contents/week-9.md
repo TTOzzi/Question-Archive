@@ -135,3 +135,138 @@
 
 -----
 
+### Q.
+
+> 코드로 오토레이아웃을 설정하고 싶어요.
+
+코드로 오토레이아웃을 어떻게 설정하나요?
+
+[질문 바로가기](https://stackoverflow.com/questions/26180822/how-to-add-constraints-programmatically-using-swift)
+
+### A.
+
+* 코드로 오토레이아웃을 설정하는 방법에는 여러 가지가 있습니다. 아래 사진처럼 현재 화면에 보이는 뷰 중앙에 가로, 세로 길이가 100인 뷰를 추가하는 코드를 예시로 들어보겠습니다. 다음 예시들은 모두 같은 레이아웃을 설정하는 코드입니다.
+
+  <img width="40%" alt="스크린샷 2020-09-13 오후 11 42 09" src="https://user-images.githubusercontent.com/50410213/93020902-cac96400-f61a-11ea-8ad4-271761e6627f.png">
+
+* 코드로 설정하는 레이아웃은 크게 제약조건을 생성하는 부분과 제약조건을 활성화하는 부분으로 나뉩니다. 제약조건을 먼저 생성하고 생성한 제약조건을 활성화하는 방식으로 레이아웃을 설정합니다.
+
+  ```swift
+  override func viewDidLoad() {
+          super.viewDidLoad()
+          let squareView = UIView()
+          squareView.backgroundColor = .systemIndigo
+          view.addSubview(squareView)
+          
+          // autoResizingMask 를 제약조건으로 변환하지 않겠다는 것을 명시
+          squareView.translatesAutoresizingMaskIntoConstraints = false
+    
+          // 레이아웃 제약조건 생성 코드 작성
+          ...
+          
+          // 레이아웃 제약조건 활성화 코드 작성
+          ...
+      }
+  ```
+
+  코드로 오토레이아웃을 설정해 줄 땐 반드시 설정해줄 뷰의 [translatesAutoresizingMaskIntoConstraints](https://developer.apple.com/documentation/uikit/uiview/1622572-translatesautoresizingmaskintoco) 를 false 로 설정해주어야 합니다. 기본적으로 코드로 생성한 뷰는 true 를 기본값으로 가지며 인터페이스 빌더에 뷰를 추가하면 자동으로 false 로 설정되지만, 우리는 코드로 오토레이아웃을 설정해줄 것이기 때문에 직접 false 로 설정해주어야 합니다.
+
+* 제약조건 생성
+
+  * [NSLayoutConstraint 의 이니셜라이저](https://developer.apple.com/documentation/uikit/nslayoutconstraint/1526954-init)를 활용한 제약조건 생성
+
+    ```swift
+    let horizontalConstraint = NSLayoutConstraint(item: squareView, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 0)
+    let verticalConstraint = NSLayoutConstraint(item: squareView, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0)
+    let widthConstraint = NSLayoutConstraint(item: squareView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+    let heightConstraint = NSLayoutConstraint(item: squareView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+    ```
+
+    NSLayoutConstraint 의 이니셜라이저는 제약조건 방정식을 그대로 코드로 표현한 형태입니다. 각각의 인자를 식으로 변환하면 `view1.attr1 <relation> multiplier × view2.attr2 + c` 와 같습니다.
+
+  * [NSLayoutAnchor](https://developer.apple.com/documentation/uikit/nslayoutanchor) 를 활용한 제약조건 생성
+
+    ```swift
+    let horizontalConstraint = squareView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+    let verticalConstraint = squareView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+    let widthConstraint = squareView.widthAnchor.constraint(equalToConstant: 100)
+    let heightConstraint = squareView.heightAnchor.constraint(equalToConstant: 100)
+    ```
+    
+    NSLayoutConstraint 보다 가독성이 좋고 코드가 간결합니다. 공식문서에서는 코드로 오토레이아웃을 설정할 때 NSLayoutConstraint 의 이니셜라이저보단 NSLayoutAnchor 를 권장합니다. 이 둘의 가장 큰 차이점은 잘못된 제약조건을 설정하였을 때 나타납니다.
+    
+    ```swift
+    let horizontalConstraint = NSLayoutConstraint(item: squareView, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0)
+    ```
+    
+    squareView 의 centerX 를 view 의 centerY 에 맞추라는 제약조건입니다. NSLayoutConstraint 를 사용했을 땐 위와 같이 잘못된 제약조건을 설정하면 런타임에 예외를 발생시킵니다..
+    
+    ```swift
+    // Cannot convert value of type 'NSLayoutAnchor<NSLayoutYAxisAnchor>' to expected argument type 'NSLayoutAnchor<NSLayoutXAxisAnchor>' 컴파일 에러 발생
+    let horizontalConstraint = squareView.centerXAnchor.constraint(equalTo: view.centerYAnchor)
+    ```
+    
+    반면에, NSLayoutAnchor 를 사용했을 땐 제약조건의 대상이 되는 NSLayoutAnchor 의 타입체크가 이루어져 컴파일 에러를 발생시켜 개발자에게 잘못된 제약조건을 설정한 것을 인지시켜줍니다(하지만 완벽하게 방지해주진 않습니다. 런타임에 충돌이 발생할 수 있습니다.).
+
+* 제약조건 활성화
+
+  * UIView 의 [addConstraints(_:)](https://developer.apple.com/documentation/uikit/uiview/1622523-addconstraint) 를 활용한 제약조건 활성화
+
+    ```swift
+    view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
+    ```
+
+    공식문서에서는 iOS 8 이상의 환경에선 addCostraints(_:) 를 직접 호출하는 것보다 isActive 를 활용하라고 합니다.
+
+  * [NSLayoutConstraint 의 isActive](https://developer.apple.com/documentation/uikit/nslayoutconstraint/1527000-isactive) 를 활용한 제약조건 활성화
+
+    ```swift
+    horizontalConstraint.isActive = true
+    verticalConstraint.isActive = true
+    widthConstraint.isActive = true
+    heightConstraint.isActive = true
+    ```
+
+    Bool 값을 할당하여 제약조건을 활성화, 비활성화할 수 있습니다.
+
+  * [NSLayoutConstraint 의 active(_:)](https://developer.apple.com/documentation/uikit/nslayoutconstraint/1526955-activate) 를 활용한 제약조건 활성화
+
+    ```swift
+    NSLayoutConstraint.activate([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
+    ```
+    
+    한 번의 호출로 여러 개의 제약조건을 활성화할 수 있습니다. 각 제약조건의 isActive 를 true 로 설정하는 것과 같습니다.
+
+* Visual format 언어를 활용한 방법([constraints(withVisualFormat:options:metrics:views:)](https://developer.apple.com/documentation/uikit/nslayoutconstraint/1526944-constraints))
+
+  ```swift
+  class ViewController: UIViewController {
+      
+      override func viewDidLoad() {
+          super.viewDidLoad()
+          let squareView = UIView()
+          squareView.backgroundColor = .systemIndigo
+          view.addSubview(squareView)
+          
+          squareView.translatesAutoresizingMaskIntoConstraints = false
+          // 레이아웃 제약조건 생성 코드
+          let views = ["view": view!, "squareView": squareView]
+          let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:[view]-(<=0)-[squareView(100)]", options: .alignAllCenterY, metrics: nil, views: views)
+          let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:[view]-(<=0)-[squareView(100)]", options: .alignAllCenterX, metrics: nil, views: views)
+          // 레이아웃 활성화 코드
+          // UIView 의 addConstrains(_:) 를 활용한 방법
+          view.addConstraints(horizontalConstraints)
+          view.addConstraints(verticalConstraints)
+          // NSLayoutConstraint 의 active(_:) 를 활용한 방법
+          NSLayoutConstraint.activate(horizontalConstraints)
+          NSLayoutConstraint.activate(verticalConstraints)
+      }    
+  }
+  
+  ```
+
+  애플에서 제공하는 Visual Format 언어를 활용해 문자열 형식으로 레이아웃을 표현합니다. 간단한 표현식만으로 한번에 여러 개의 제약조건을 생성할 수 있다는 장점이 있습니다. 하지만 표현의 완전성보다 시각화에 초점을 둔 기능으로 가로, 세로 비율 설정과 같이 설정하지 못하는 제약조건이 있다는 한계가 있고, 컴파일러가 Visual Format 언어의 유효성을 검사하지 않아 잘못된 제약조건을 설정하면 런타임에 예외가 발생합니다. 한 문장으로 여러 개의 제약조건을 표현할 수 있어 반환 값이 위의 예시들과는 달리 배열입니다. 그래서 활성화하는 코드도 조금 차이가 있습니다. 자세한 문법은 [Auto Layout Guide: Visual Format Language]((https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html#//apple_ref/doc/uid/TP40010853-CH27-SW1)) 에서 확인하실 수 있습니다.
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [Auto Layout Guide: Programmatically Creating Constraints](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/ProgrammaticallyCreatingConstraints.html#//apple_ref/doc/uid/TP40010853-CH16-SW1)
