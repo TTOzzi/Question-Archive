@@ -108,3 +108,30 @@
 
 -----
 
+### Q.
+
+> 자기 자신의 프로퍼티나 메소드에 접근할 때 항상 self 를 붙여줘야 하나요?
+
+클래스, 구조체, 열거형의 내부에서 자기 자신의 프로퍼티나 메소드에 접근할 때 self 를 명시해줄 수도, 생략할 수도 있는데요. self 를 계속 명시해주는 것과 self 를 꼭 필요할 때만 쓰는 것 중 어떤 방법이 더 나은가요?
+
+[질문 바로가기](https://stackoverflow.com/questions/24215578/when-should-i-access-properties-with-self-in-swift)
+
+### A.
+
+* self 를 항상 명시한다면, 생략하는 것보다 명확하게 자기 자신의 프로퍼티나 메소드를 사용한다는 의도를 표현할 수 있습니다. 반대로, self 를 필요할 때만 명시하는 경우 코드가 간결해지고, 컴파일러에서 클로저 내부에서의 self 접근에 self 의 명시를 강제하기 때문에, 클로저 캡처로 인한 순환 참조가 발생할 가능성이 있는 부분이 눈에 띈다는 장점이 있습니다.
+
+* 다음은 깃헙에서 star 가 많은 순서대로 나열한 회사들의 스타일 가이드입니다.
+
+  <img src="https://user-images.githubusercontent.com/50410213/93017717-d4949c80-f605-11ea-9098-3f9f35db08fe.png"/>
+
+  이 중 [raywenderlich](https://github.com/raywenderlich/swift-style-guide#use-of-self), [github](https://github.com/github/swift-style-guide#only-explicitly-refer-to-self-when-required), [linkedin](https://github.com/linkedin/swift-style-guide#3-coding-style), [airbnb](https://github.com/airbnb/swift#style) 에서는 컴파일러에서 필요로 할 때만 self 를 명시하고 [eure](https://github.com/eure/swift-style-guide#all-instance-properties-and-functions-should-be-fully-qualified-with-self-including-within-closures), [StyleShare](https://github.com/StyleShare/swift-style-guide#%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-%EA%B5%AC%EC%A1%B0%EC%B2%B4) 에서는 self 를 항상 명시한다고 합니다.
+
+* 자료를 찾아보면서 self 를 명시해야 하느냐에 대한 논쟁이 굉장히 많았습니다. 실제로 (거절당했지만)[SE-0009: Require self for accessig istance members](https://github.com/apple/swift-evolution/blob/master/proposals/0009-require-self-for-accessing-instance-members.md) 와 같은 제안도 있었습니다. self 명시는 정해진 정답이 없습니다. 팀에 속해있다면 팀 내에서 컨벤션을 정하여 맞추면 되고, 혼자라면 스스로 기준을 두고 결정하여 통일성만 유지한다면 어떤 방법으로 작성하든 상관없다고 생각합니다.
+
+### 참고할 만한 비슷한 질문, 자료
+
+* [How to Use Correctly 'self' Keyword in Swift](https://dmitripavlutin.com/how-to-use-correctly-self-keyword-in-swift/)
+* [Clean code: whe to use "self." in Swift, and when not to](http://thebugcode.github.io/when-to-self-in-swift-and-when-not-to-2/)
+
+-----
+
