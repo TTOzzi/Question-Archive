@@ -199,7 +199,7 @@
     let horizontalConstraint = NSLayoutConstraint(item: squareView, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0)
     ```
     
-    squareView 의 centerX 를 view 의 centerY 에 맞추라는 제약조건입니다. NSLayoutConstraint 를 사용했을 땐 위와 같이 잘못된 제약조건을 설정하면 런타임에 예외를 발생시킵니다..
+    squareView 의 centerX 를 view 의 centerY 에 맞추라는 제약조건입니다. NSLayoutConstraint 를 사용했을 땐 위와 같이 잘못된 제약조건을 설정하면 런타임에 예외를 발생시킵니다.
     
     ```swift
     // Cannot convert value of type 'NSLayoutAnchor<NSLayoutYAxisAnchor>' to expected argument type 'NSLayoutAnchor<NSLayoutXAxisAnchor>' 컴파일 에러 발생
@@ -265,7 +265,7 @@
   
   ```
 
-  애플에서 제공하는 Visual Format 언어를 활용해 문자열 형식으로 레이아웃을 표현합니다. 간단한 표현식만으로 한번에 여러 개의 제약조건을 생성할 수 있다는 장점이 있습니다. 하지만 표현의 완전성보다 시각화에 초점을 둔 기능으로 가로, 세로 비율 설정과 같이 설정하지 못하는 제약조건이 있다는 한계가 있고, 컴파일러가 Visual Format 언어의 유효성을 검사하지 않아 잘못된 제약조건을 설정하면 런타임에 예외가 발생합니다. 한 문장으로 여러 개의 제약조건을 표현할 수 있어 반환 값이 위의 예시들과는 달리 배열입니다. 그래서 활성화하는 코드도 조금 차이가 있습니다. 자세한 문법은 [Auto Layout Guide: Visual Format Language]((https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html#//apple_ref/doc/uid/TP40010853-CH27-SW1)) 에서 확인하실 수 있습니다.
+  애플에서 제공하는 Visual Format 언어를 활용해 문자열 형식으로 레이아웃을 표현합니다. 간단한 표현식만으로 한번에 여러 개의 제약조건을 생성할 수 있다는 장점이 있습니다. 하지만 표현의 완전성보다 시각화에 초점을 둔 기능으로 가로, 세로 비율 설정과 같이 설정하지 못하는 제약조건이 있다는 한계가 있고, 컴파일러가 Visual Format 언어의 유효성을 검사하지 않아 잘못된 제약조건을 설정하면 런타임에 예외가 발생합니다. 한 문장으로 여러 개의 제약조건을 표현할 수 있어 반환 값이 위의 예시들과는 달리 배열입니다. 그래서 활성화하는 코드도 조금 차이가 있습니다. 자세한 문법은 [Auto Layout Guide: Visual Format Language](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html#//apple_ref/doc/uid/TP40010853-CH27-SW1) 에서 확인하실 수 있습니다.
 
 ### 참고할 만한 비슷한 질문, 자료
 
