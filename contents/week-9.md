@@ -128,7 +128,7 @@
 
 * 자료를 찾아보면서 self 를 명시해야 하느냐에 대한 논쟁이 굉장히 많았습니다. 실제로 (거절당했지만)[SE-0009: Require self for accessig istance members](https://github.com/apple/swift-evolution/blob/master/proposals/0009-require-self-for-accessing-instance-members.md) 와 같은 제안도 있었습니다. self 명시는 정해진 정답이 없습니다. 팀에 속해있다면 팀 내에서 컨벤션을 정하여 맞추면 되고, 혼자라면 스스로 기준을 두고 결정하여 통일성만 유지한다면 어떤 방법으로 작성하든 상관없다고 생각합니다.
 
-* **Swift 5.3** 부터는 클로저 내부에서 순환 참조가 발생하지 않는 값 유형의 캡처에 대해선 self 의 생략이 가능합니다. 순환 참조가 발생하는 경우에만 self 를 붙여야 한다는 컴파일 에러가 발생합니다. [SE-0269: Increase availability of implicit `self` in `@escaping` closures when reference cycles are unlikely to occur](https://github.com/apple/swift-evolution/blob/master/proposals/0269-implicit-self-explicit-capture.md) 를 참고하세요. 개인적인 생각이지만, Swift 의 업데이트 방향을 봤을 때 애플에서는 self 를 생략하는 것을 권장하는 것 같습니다.
+* **Swift 5.3** 부터는 클로저 내부에서 `[self]`, `[unowned self]` 와 같이 캡처 의도를 명확하게 선언하거나(`[weak self]` 제외), 순환 참조가 발생하지 않는 값 유형의 캡처에 대해선 self 의 생략이 가능합니다. 순환 참조가 발생할 가능성이 있는 경우에만 self 를 붙여야 한다는 컴파일 에러가 발생합니다. [SE-0269: Increase availability of implicit `self` in `@escaping` closures when reference cycles are unlikely to occur](https://github.com/apple/swift-evolution/blob/master/proposals/0269-implicit-self-explicit-capture.md) 를 참고하세요. 개인적인 생각이지만, Swift 의 업데이트 방향을 봤을 때 애플에서는 self 를 생략하는 것을 권장하는 것 같습니다.
 
 ### 참고할 만한 비슷한 질문, 자료
 
