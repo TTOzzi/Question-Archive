@@ -42,6 +42,8 @@
 34. [@objc 의 의미가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-9.md#q)
 35. [자기 자신의 프로퍼티나 메소드에 접근할 때 항상 self 를 붙여줘야 하나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-9.md#q-1)
 36. [코드로 오토레이아웃을 설정하고 싶어요.](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-9.md#q-2)
+37. [뷰와 레이어의 차이가 무엇인가요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-10.md#q)
+38. [Swift 에서 Optional 은 어떻게 구현되어 있나요?](https://github.com/TTOzzi/Question-Archive/blob/master/contents/week-10.md#q-1)
 
 #### 참고한 커뮤니티
 * [야곰닷넷](https://yagom.net/)
