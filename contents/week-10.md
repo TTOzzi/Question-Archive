@@ -24,7 +24,7 @@
 
   iOS 에서 모든 뷰는 레이어를 포함하고 있습니다. 뷰는 레이어를 포함하고 있고, 그 레이어를 그려주는 인터페이스와 이벤트 처리를 포함한 별도의 클래스입니다(공식문서에서는 thin wrapper 라고 표현합니다). 뷰는 [UIResponder](https://developer.apple.com/documentation/uikit/uiresponder) 를 상속받아 터치, 모션, 프레스와 같은 이벤트를 처리합니다. 뷰와 관련된 작업은 레이어와 달리 이벤트 처리를 하므로 메인 스레드에서 발생하며 CPU 를 사용합니다. 뷰에 의해 레이어가 생성되면 뷰가 자기 자신을 레이어의 [delegate](https://developer.apple.com/documentation/quartzcore/calayer/1410984-delegate) 로 자동 할당합니다. 뷰를 통해 컨텐츠를 그리는 코드를 작성할 수 있지만, 이는 뷰가 처리하는 것이 아닌 뷰가 포함하는 레이어에 위임해서 컨텐츠를 그리도록 하는 것 입니다.
 
-* 대부분의 경우 뷰를 활용해 화면을 그리겠지만, 레이어를 사용하는 것이 훨씬 좋거나 레이어를 사용해야만 하는 경우가 있습니다. 막대차트, 파이차트와 같은 이벤트 처리가 필요 없으면서 세부적인 시각적 표현이 필요한 경우나, 복잡한 애니메이션 설정이 필요한 경우 레이어를 사용해 구현합니다. CoreAnimation 은 [CATextLayer](https://developer.apple.com/documentation/quartzcore/catextlayer), [CAShapeLayer](https://developer.apple.com/documentation/quartzcore/cashapelayer) 등의 여러 가지 레이어 클래스를 제공하며, 이들을 활용해 정말 다양한 그래픽 표현이 가능합니다. 다양한 레이어 클래스를 활용한 예시는 [CALayer Tutorial for iOS: Gettinng Started](https://www.raywenderlich.com/10317653-calayer-tutorial-for-ios-getting-started) 를 참고하세요.
+* 대부분의 경우 뷰를 활용해 화면을 그리겠지만, 레이어를 사용하는 것이 훨씬 좋거나 레이어를 사용해야만 하는 경우가 있습니다. 막대차트, 파이차트와 같은 이벤트 처리가 필요 없으면서 세부적인 시각적 표현이 필요한 경우나, 복잡한 애니메이션 설정이 필요한 경우 레이어를 사용해 구현하는 것이 좋습니다. CoreAnimation 은 [CATextLayer](https://developer.apple.com/documentation/quartzcore/catextlayer), [CAShapeLayer](https://developer.apple.com/documentation/quartzcore/cashapelayer) 등의 여러 가지 레이어 클래스를 제공하며, 이들을 활용해 정말 다양한 그래픽 표현이 가능합니다. 다양한 레이어 클래스를 활용한 예시는 [CALayer Tutorial for iOS: Gettinng Started](https://www.raywenderlich.com/10317653-calayer-tutorial-for-ios-getting-started) 를 참고하세요.
 
 ### 참고할 만한 비슷한 질문, 자료
 
